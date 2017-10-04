@@ -1,0 +1,55 @@
+Mailman - User Interface
+Summary
+
+Using Bootstrap 4 and HTML, construct the user interface (and only the user interface) for a simple mail web application.
+
+Use the screenshots from comp484-project-1-screenshots.zipView in a new window as inspiration and to figure out the flow of the screens.
+
+Instructions
+
+Create the following visual features for the UI:
+
+Navigation bar that appears at the top of every page
+Sidebar navigation that appears on every page except the Login page
+The sidebar should link to and show how many unread messages are in the Inbox, how many messages are in the Trash, and how many messages have been marked as Spam. There should also be a link to the Compose New Message screen in the sidebar.
+Pages:
+Login: should contain a form with username and password inputs plus a Login button. The Login button should do one of the following: either link to the Inbox page or submit the form to the Inbox page using the HTTP GET method.
+Inbox: should contain a set of summarized fictional email messages, styled differently based on whether they have been "read" or not. Your Inbox should include at least one read message and two unread messages. There should also be three buttons for common Inbox operations (Mark Read, Mark All as Read, Delete, Mark as Spam, Star Message, etc.) below the set of messages.
+Trash: should contain a set of summarized fictional email messages that have been deleted. There needs to be at least one message here. There should also be three buttons for common Trash operations (Restore, Report, Restore All, Empty Trash, etc) below the set of messages.
+Spam: should contain a set of summarized fictional email messages that have been marked as spam. There needs to be at least one message here. There should also be two buttons for common Spam operations (Move to Inbox, Report, Delete, etc) below the set of messages.
+Compose New Message: should contain a form with recipient field, title field, and body text area plus a Send Message button. The Send Message button should do one of the following: either link to the Success page or submit the form to the Success page using the HTTP GET method.
+Success Page: should contain a success message regarding sending the message formatted as a success alert along with links back to the Inbox and Compose New Message pages.
+Available Points
+
+This project is worth 20 points, weighted at 10% of the total grade.
+
+Grading Scale
+Low Scores
+
+0 points: No submission
+
+1 - 5 points: Barely any effort and leaves out most of the specification
+
+6 - 10 points: Little effort and touches about half of the specification
+
+Medium Score
+
+11 - 14 points: Average amount of effort and touches all of the specification but in a minimal way
+
+High Scores
+
+15 - 17 points: Additional amount of effort with an interesting take on the specification
+
+18 - 20 points: Submission quality is between great and scintillating
+
+Extra Credit
+
+Do everything above using Metaphor as well. You must submit both your Bootstrap and Metaphor versions in the same ZIP file to qualify for the extra credit.
+
+Full extra credit is an additional 5 points on the assignment due to the utilization of an additional framework.
+
+Links
+
+Bootstrap: http://getbootstrap.com (Links to an external site.)Links to an external site.
+
+Metaphor: http://www.csun.edu/metalab/metaphor
