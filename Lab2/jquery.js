@@ -1,7 +1,7 @@
 // jquery
 
 var misses = 0;
-
+var count = 0;
 var randWord;
 var wordDisplay=[];
 var s = false;
@@ -29,31 +29,35 @@ $(document).ready(function(){
     $('#start').append('<btn id="startbtn" style="visibility: hidden;" class="btn-danger h3">Start New Game</btn>\n');
     
     $('.letter').click( function(){
-                
         $(this).css('visibility', 'hidden');
         c++;
         //console.log(c);
         
-        if( c == 26 ){
+        if( c == 7 ){
             $('#startbtn').css('visibility', 'visible');
             s = true;
             c = 0;
         }
-        
-        console.log(wordDisplay);
-        for( var i = 0; i < randWord.length; i++ ){
-            if($(this).text() == randWord[i]){
-                console.log('same');
-                wordDisplay=$('#word').text();
-                wordDisplay[i] = randWord[i];
                 
-                console.log(wordDisplay);
-                //wordDisplay=wordDisplay.join();
-                $('#word').text(wordDisplay);
-                console.log('#word').text();
-                wordDisplay=wordDisplay.split(' ');
+        wordDisplay = $('#word').text();
+        wordDisplay=wordDisplay.split(' ');
+        for( var i = 0; i < randWord.length; i++ ){
+            if( randWord[i] == $(this).text() ){
+                console.log('same');
+                wordDisplay[i] = randWord[i];
+            }
+            else{
+                count++;
             }
         }
+        wordDisplay=wordDisplay.join(' ');
+        $('#word').text = $('#word').text(wordDisplay);
+        wordDisplay=wordDisplay.split(' ');
+        if( count == randWord.length){
+            misses++;
+            $('#misses').text = $('#misses').text(misses);
+        }
+        count=0;
     });
     
     $('#startbtn').click( function(){
@@ -61,6 +65,10 @@ $(document).ready(function(){
         showLetters();
         s = false;
         c = 0;
+        randomize();
+        misses=0;
+        $('#misses').text = $('#misses').text(misses);
+        // change misses to zero;
     });
 });
 
@@ -87,6 +95,6 @@ var randomize = function(){
     // $('#word').html('<div>'+randWord+'</div>');
     
     wordDisplay=wordDisplay.join(' ');
-    $('#word').append('<div>'+wordDisplay+'</div>');
+    $('#word').text(wordDisplay);
     wordDisplay=wordDisplay.split(' ');
 }
