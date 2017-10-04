@@ -1,5 +1,6 @@
 // jquery
 
+var startVisible = false;
 var misses = 0;
 var count = 0;
 var randWord;
@@ -29,12 +30,15 @@ $(document).ready(function(){
     $('#start').append('<btn id="startbtn" style="visibility: hidden;" class="btn-danger h3">Start New Game</btn>\n');
     
     $('.letter').click( function(){
-        $(this).css('visibility', 'hidden');
+        if( startVisible != true ){
+            $(this).css('visibility', 'hidden');
+        }
         c++;
         //console.log(c);
         
-        if( c == 7 ){
+        if( misses == 7 ){
             $('#startbtn').css('visibility', 'visible');
+            startVisible = true;
             s = true;
             c = 0;
         }
@@ -53,6 +57,7 @@ $(document).ready(function(){
         wordDisplay=wordDisplay.join(' ');
         $('#word').text = $('#word').text(wordDisplay);
         wordDisplay=wordDisplay.split(' ');
+        
         if( count == randWord.length){
             misses++;
             $('#misses').text = $('#misses').text(misses);
@@ -62,6 +67,7 @@ $(document).ready(function(){
     
     $('#startbtn').click( function(){
         $(this).css('visibility', 'hidden');
+        startVisible = false;
         showLetters();
         s = false;
         c = 0;
