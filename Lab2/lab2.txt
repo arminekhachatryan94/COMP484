@@ -1,0 +1,56 @@
+Simple Hangman
+Summary
+
+Using HTML and JavaScript, create the functionality and UI for a simple Hangman game.
+
+Make sure you have an understanding of JavaScript arrays, strings, the onClick event on an element, and how to use the innerHTML property of an element.
+
+Check out the screenshots (comp484-project-2-screenshots.zipView in a new window) for an idea of how the game works.
+
+Specification
+
+A Hangman game goes as follows:
+
+A word is randomly selected from a set of words
+The player is given a number of single-letter guesses to figure out the word
+A correct guess adds to the word and does not result in another body part being added to the person
+An incorrect guess increments the number of misses and adds another body part to the person
+The game is over either when the player has successfully guessed the word or has missed too many times (typically seven times in an average game)
+The body is constructed at the following points:
+One miss: One rope piece
+Two misses: Two rope pieces
+Three misses: Two rope pieces, head
+Four misses: Two rope pieces, head, neck
+Five misses: Two rope pieces, head, neck, torso (chest and arms)
+Six misses: Two rope pieces, head, neck, torso, one leg
+Seven misses: Two rope pieces, head, neck, torso, two legs
+User Interface
+The user interface should contain the following:
+
+A set of buttons (one letter each, A-Z) that, when clicked, send a letter guess to the game logic
+A Start New Game button that resets the game after a win or loss and begins a new game
+A display of the current state of the body (can be ASCII art, actual images, or a plain-text description of the body) that changes based on the number of misses; maxing out the misses should create a full body
+A display of the misses left to make
+The current word with only the correctly-guessed letters shown; all other characters should be underscores or dashes
+I'm not looking for anything stellar for the UI but just make sure all of the components are there.
+
+Functionality
+The game should begin when the page is loaded
+Each letter guess should add to and check the set of guessed letters against the selected word
+If the letters all match, the game has been won
+If the guess is not part of the word, add a miss
+Each guess (right or wrong) should update the user interface appropriately (all correct letters shown in the word, an image representing the state of the body, number of misses left, etc)
+Maxing-out the number of available misses loses the game
+When the game has been won OR lost, display an appropriate message
+If the game has been lost, however, also display the word that was selected so the player knows what the win condition would have been
+Grading
+
+This project is worth 20 points, weighted at 15% of the grade. Implementing all of the functionality is considerably more important than how the UI looks.
+
+I'm going to be using Chrome to run everything since Firefox can be funky sometimes.
+
+Extra Credit
+
+Clicking on the letter buttons should hide them (set the "visibility" CSS property). On game start, all letter buttons should be shown as well.
+
+The extra credit is worth 2 points.

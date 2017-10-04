@@ -1,0 +1,51 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+#background-img {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(170, 242, 249, 0.4), rgba(170, 242, 249, 0.4)), url(https://media.giphy.com/media/qAthTQR28Nnji/giphy.gif) no-repeat fixed;
+    background-size: cover;
+}
+  
+&:before {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+  }
+}
+
+#navbar{
+    width: 100%;
+    z-index: 1;
+    position: fixed;
+}
+
+main{
+    /*padding-top: 20px;
+    padding-bottom: 140px;*/
+}
+
+.container > a {
+    display: inline-block;
+}
+
+footer{
+    width: 100%;
+    background: linear-gradient(rgba(170, 242, 249, 0.4), rgba(170, 242, 249, 0.4)), url(https://media.giphy.com/media/qAthTQR28Nnji/giphy.gif) no-repeat fixed;
+    background-size: cover;
+}
+
+#brdr{
+    border-style: solid;
+    border-bottom-color: transparent;
+}
+
+.login-bg{
+    padding-top: 100px;
+    background: linear-gradient(rgba(170, 242, 249, 0.4), rgba(170, 242, 249, 0.4)), url(https://lh3.googleusercontent.com/pVx0N6fRQgm_6sK2zNLr-hvqrVK6URzgwDVuoBqgINZ_VQaPO1G9ZxT0BgRHF8iVfw=h900) no-repeat fixed;
+    background-size: cover;    
+}
