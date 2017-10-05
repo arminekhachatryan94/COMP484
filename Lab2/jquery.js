@@ -1,12 +1,7 @@
-// jquery
-
-var startVisible = false;
+var checkArrayCount = 0;
 var misses = 0;
-var count = 0;
 var randWord;
-var wordDisplay=[];
-var s = false;
-var c = 0;
+var wordDisplay;
 
 var words = [
     'PROGRAMMING',
@@ -21,64 +16,28 @@ var words = [
     'ENGINEERING',
 ];
 
-// initially
 $(document).ready(function(){
+    // get random hangman word
     randomize();
     
+    // add alphabet buttons to html
     addLetters();
     
+    // add hidden start button to html
     $('#start').append('<btn id="startbtn" style="visibility: hidden;" class="btn-danger h3">Start New Game</btn>\n');
     
-    $('.letter').click( function(){
-        if( startVisible != true ){
-            $(this).css('visibility', 'hidden');
-        }
-        c++;
-        //console.log(c);
+    // letter button is clicked
+    $('#letter').click( function(){
         
-        if( misses == 7 ){
-            $('#startbtn').css('visibility', 'visible');
-            startVisible = true;
-            s = true;
-            c = 0;
-        }
-                
-        wordDisplay = $('#word').text();
-        wordDisplay=wordDisplay.split(' ');
-        for( var i = 0; i < randWord.length; i++ ){
-            if( randWord[i] == $(this).text() ){
-                console.log('same');
-                wordDisplay[i] = randWord[i];
-            }
-            else{
-                count++;
-            }
-        }
-        wordDisplay=wordDisplay.join(' ');
-        $('#word').text = $('#word').text(wordDisplay);
-        wordDisplay=wordDisplay.split(' ');
-        
-        if( count == randWord.length){
-            misses++;
-            $('#misses').text = $('#misses').text(misses);
-        }
-        count=0;
     });
     
+    // start button is clicked
     $('#startbtn').click( function(){
-        $(this).css('visibility', 'hidden');
-        startVisible = false;
-        showLetters();
-        s = false;
-        c = 0;
+        // get another random word from array
         randomize();
-        misses=0;
-        $('#misses').text = $('#misses').text(misses);
-        // change misses to zero;
     });
 });
 
-// add letters to html page
 var addLetters = function(){
     var x = '65';
     for( var i = 0; i < 26; i++ ){
@@ -92,6 +51,7 @@ var showLetters = function(){
     $('.letter.letter').css('visibility', 'visible');
 }
 
+// get random word from list
 var randomize = function(){
     randWord = words[Math.floor(Math.random()*words.length)];
     
