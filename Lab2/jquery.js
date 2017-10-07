@@ -31,10 +31,7 @@ $(document).ready(function(){
     // get random hangman word
     randomize();
     distinctLetters();
-    
-    console.log("word: " + randWord);
-    console.log("distinct: " + totalDifferentLetters);
-    
+        
     // blank hangman image
     $('#hangmanBody').html('<img src="images/0.png">');
     
@@ -150,10 +147,7 @@ $(document).ready(function(){
         totalDifferentLetters = 0;
         distinctLetters();
         currentDifferentLetters = 0;
-        
-        console.log("word: " + randWord);
-        console.log("word: " + wordDisplay);
-        
+                
         // show all letters
         showLetters();
         
