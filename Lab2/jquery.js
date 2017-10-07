@@ -6,6 +6,14 @@ var startVisible = false;
 
 var lettersRevealed = 0;
 
+var lastTrue = false; // last letter to choose that's correct
+var lastFalse = false; // last letter to choose that's incorrect
+
+var totalDifferentLetters = 0;
+var currentDifferentLetters = 0;
+
+var done = false; // game over
+
 var words = [
     'PROGRAMMING',
     'INHERITANCE',
@@ -22,6 +30,10 @@ var words = [
 $(document).ready(function(){
     // get random hangman word
     randomize();
+    distinctLetters();
+    
+    console.log("word: " + randWord);
+    console.log("distinct: " + totalDifferentLetters);
     
     // blank hangman image
     $('#hangmanBody').html('<img src="images/0.png">');
@@ -34,7 +46,73 @@ $(document).ready(function(){
     
     // letter button is clicked
     $('.letter').click( function(){
-        if( (misses < 7) && (lettersRevealed < randWord.length) ){
+        if( lastFalse == true && !done ){
+            // hide letter buttons
+            $(this).css('visibility', 'hidden');
+            
+            // check and reveal letter
+            var letter = $(this).text();
+            var rightLetter = checkLetterReveal(letter);
+            if( rightLetter != true ){ // last false attempt
+                misses++;
+                $('#hangmanBody').html('<img src="images/'+misses+'.png">');
+                $('#misses').text = $('#misses').text(misses);
+                
+                // lost
+                $('#win_lose').text("You lost. The word was '" + randWord + "'. Select New Game to play again.");
+                $('#win_lose').css('color', 'red');
+                
+                // show start button
+                $('#startbtn').css('visibility', 'visible');
+                startVisible = true;
+                
+                // game over
+                done = true;
+            }
+            else{
+                // correct letter
+                wordDisplay=wordDisplay.join(' ');
+                $('#word').text = $('#word').text(wordDisplay);
+                wordDisplay=wordDisplay.split(' ');
+                currentDifferentLetters++;
+            }
+        }
+        else if( lastTrue == true && !done ){
+            // hide letter buttons
+            $(this).css('visibility', 'hidden');
+            
+            // check and reveal letter
+            var letter = $(this).text();
+            var rightLetter = checkLetterReveal(letter);
+            if( rightLetter == true ){
+                
+                // correct letter;
+                wordDisplay=wordDisplay.join(' ');
+                $('#word').text = $('#word').text(wordDisplay);
+                wordDisplay=wordDisplay.split(' ');
+                
+                // win
+                $('#win_lose').text('YOU WON! Select New Game to play again.');
+                $('#win_lose').css('color', 'green');
+                
+                // show start button
+                $('#startbtn').css('visibility', 'visible');
+                startVisible = true;
+                
+                // game over
+                done = true;
+                currentDifferentLetters++;
+            }
+            else{
+                // wrong letter
+                misses++;
+                $('#hangmanBody').html('<img src="images/'+misses+'.png">');
+                $('#misses').text = $('#misses').text(misses);
+            }
+        }
+        
+        else if( (misses < 7) && (lettersRevealed < randWord.length) && !done ){
+            
             // hide letter buttons
             $(this).css('visibility', 'hidden');
             
@@ -50,35 +128,31 @@ $(document).ready(function(){
                 wordDisplay=wordDisplay.join(' ');
                 $('#word').text = $('#word').text(wordDisplay);
                 wordDisplay=wordDisplay.split(' ');
-            }
-        }
-        else{
-            // lose
-            if( misses == 7 ){
-                console.log('Sorry you lost!');
-                $('#win_lose').text("You lost. The word was '" + randWord + "'. Select New Game to play again.");
-                $('#win_lose').css('color', 'red');
-            }
-            // win
-            if( lettersRevealed == randWord.length ){
-                console.log('You win!');
-                $('#win_lose').text('YOU WON! Select New Game to play again.');
-                $('#win_lose').css('color', 'green');
+                currentDifferentLetters++;
             }
             
-            // don't hide letter buttons
             
-            // show start button
-            $('#startbtn').css('visibility', 'visible');
-            startVisible = true;
+            if( misses + 1 == 7){
+                lastFalse = true;
+            }
             
+            if( currentDifferentLetters + 1 == totalDifferentLetters ){
+                lastTrue = true;
+            }
         }
     });
     
     // start button is clicked
     $('#startbtn').click( function(){
         // get another random word from array
-        randomize();
+        wordDisplay.splice(0,wordDisplay.length);
+        randomizeHTML();
+        totalDifferentLetters = 0;
+        distinctLetters();
+        currentDifferentLetters = 0;
+        
+        console.log("word: " + randWord);
+        console.log("word: " + wordDisplay);
         
         // show all letters
         showLetters();
@@ -97,6 +171,10 @@ $(document).ready(function(){
         
         $('#win_lose').text('');
         $('#win_lose').css('color', 'black');
+        
+        lastTrue = false;
+        lastFalse = false;
+        done = false;
     });
 });
 
@@ -127,6 +205,19 @@ var randomize = function(){
     wordDisplay=wordDisplay.split(' ');
 }
 
+var randomizeHTML = function(){
+    randWord = words[Math.floor(Math.random()*words.length)];
+    
+    for( var i = 0; i < randWord.length; i++ ){
+        wordDisplay[i] = '_';
+    }
+    
+    wordDisplay=wordDisplay.join(' ');
+    $('#word').empty();
+    $('#word').text(wordDisplay);
+    wordDisplay=wordDisplay.split(' ');
+}
+
 var checkLetterReveal = function( letter ){
     var count = 0;
     for( var i = 0; i < randWord.length; i++ ){
@@ -141,5 +232,18 @@ var checkLetterReveal = function( letter ){
     }
     else{
         return false;
+    }
+}
+
+var distinctLetters = function(){
+    for( var i = 0; i < randWord.length; i++ ){
+        for( var j = 0; j < i; j++ ){
+            if (randWord[i] == randWord[j]){
+                break;
+            }
+        }
+        if(j==i){
+            totalDifferentLetters++;
+        }
     }
 }
