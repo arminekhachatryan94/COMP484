@@ -1,0 +1,30 @@
+body {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(74, 48, 48, 0.2), rgba(74, 48, 48, 0.2)), url(http://www.frukmagazine.com/wp-content/uploads/2015/11/coffeeeee.jpg) no-repeat fixed;
+    background-size: cover;
+}
+
+.navig {
+    background-color: rosybrown;
+    padding-left: 10px;
+    position: fixed;
+}
+
+.nav-comp {
+    padding-left: 30px;
+}
+
+.login {
+    background-color: white;
+    color: saddlebrown;
+    align-content: center;
+}
+
+.page {
+    background-color:beige;
+    border-top: 1000px;
+    padding: 100px;
+    width: 80%;
+    color:
+}
