@@ -6,25 +6,31 @@ body {
 }
 
 .navig {
-    background-color: rosybrown;
+    background-color: saddlebrown;
     padding-left: 10px;
     position: fixed;
+    z-index: 1;
 }
 
 .nav-comp {
     padding-left: 30px;
 }
 
-.login {
+.index {
     background-color: white;
     color: saddlebrown;
     align-content: center;
+    padding: 10px;
+    margin-top: 100px;
 }
 
 .page {
-    background-color:beige;
-    border-top: 1000px;
+    background-color: beige;
+    background:linear-gradient(transparent beige 100px, transparent beige 10px);
     padding: 100px;
+    border-top: 10px;
+    align-content: center;
+    opacity: 0.8;
     width: 80%;
-    color:
+    margin: auto;
 }
