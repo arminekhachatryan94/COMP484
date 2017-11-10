@@ -36,13 +36,14 @@ if( !empty($_POST)){
                 
                 if( $result[$i]["display_name"] == "Barista"){
                     $_SESSION["display_name"] = "Barista";
+                    header("Location: barista_home.php", true); // true to replace the header
+                    exit();
                 }
                 else{
                     $_SESSION["display_name"] = "Customer";
-                }
-                
-                header("Location: home.php", true); // true to replace the header
-                exit();
+                    header("Location: customer_home.php", true); // true to replace the header
+                    exit();
+                }                
             }
             // echo $db_username . " " . $db_password;
         }
