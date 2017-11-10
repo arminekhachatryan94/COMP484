@@ -5,7 +5,8 @@
     <br><br><br><br>
     
     <?php echo $_SESSION["display_name"]; ?>
-    Home
+    Menu
+
 </div>
 
 <!-- add remaining scripts -->
