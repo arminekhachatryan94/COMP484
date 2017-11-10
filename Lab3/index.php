@@ -1,3 +1,4 @@
+
 <!-- add stylesheets and scripts !-->
 <?php include "templates/head.php"; ?>
 <!--div class="page text-center">

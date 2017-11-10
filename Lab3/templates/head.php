@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -17,3 +18,4 @@
             <?php include "nav.php"; ?>
         </header>
         <main>
+            
