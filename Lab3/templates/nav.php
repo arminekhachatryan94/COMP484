@@ -4,7 +4,7 @@
     <div class="row h3" style="display:inline;">
         <div class="col-md-8 text-left">
             <!-- left -->
-            <a href="index.php" class="h1 text-white">Tsarbucks</a>
+            <a href="index.php" class="h1 text-white" style="padding:10px;">Tsarbucks</a>
             
             <a href="<?php
                      if( !empty($_SESSION["display_name"]) ){
@@ -18,19 +18,19 @@
                      else{
                          echo "index.php";
                      }
-                    ?>" class="text-white">Home</a>
+                    ?>" class="text-white" style="padding:10px;">Home</a>
             
             <!-- Barista -->
             <?php
             if( !empty($_SESSION["display_name"]) && $_SESSION["display_name"] == "Barista" ){ ?>
-            <a href="barista_pending.php" class="text-white">Pending Orders</a>
+            <a href="barista_pending.php" class="text-white" style="padding:10px;">Pending Orders</a>
             <?php } ?>
             
             <!-- Customer -->
             <?php
             if( !empty($_SESSION["display_name"]) && $_SESSION["display_name"] == "Customer" ){ ?>
-            <a href="customer_menu.php" class="text-white">Menu</a>
-            <a href="customer_myorders.php" class="text-white">My Orders</a>
+            <a href="customer_menu.php" class="text-white" style="padding:10px;">Menu</a>
+            <a href="customer_myorders.php" class="text-white" style="padding:10px;">My Orders</a>
             <?php } ?>
         </div>
                 
@@ -39,7 +39,7 @@
             <!-- right -->
             <?php
             if( !empty($_SESSION["display_name"]) ){ ?>
-            <a href="index.php" class="text-white">
+            <a href="index.php" class="text-white" style="padding:10px;">
                 <?php
                 if( $_SESSION["display_name"] == "Barista" ){
                     echo "Barista";
@@ -54,15 +54,15 @@
             <!-- Customer -->
             <?php
             if( !empty($_SESSION["display_name"]) && $_SESSION["display_name"] == "Customer" ){ ?>
-            <a href="customer_mycart.php" class="text-white">My Cart</a>
+            <a href="customer_mycart.php" class="text-white" style="padding:10px;">My Cart</a>
             <?php } ?>
             
             <?php
             if( empty($_SESSION["username"]) ){ ?>
-            <a href="login.php" class="text-white">Login</a>
+            <a href="login.php" class="text-white" style="padding:10px;">Login</a>
             <?php
             } else{ ?>
-            <a href="logout.php" class="text-white">Logout</a>
+            <a href="logout.php" class="text-white" style="padding:10px;">Logout</a>
             <?php } ?>
         </div>
     </div>

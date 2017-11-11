@@ -31,6 +31,7 @@ if( !empty($_POST)){
                and ($db_password == $password) ){
                 $_SESSION["username"] = $username;
                 $_SESSION["password"] = $password;
+                $_SESSION["user_id"] = $result[$i]["user_id"];
                 //echo $_SESSION["username"] . "<br>";
                 //echo $_SESSION["password"];
                 

@@ -4,7 +4,7 @@
 <div class="display-1">
     <br><br><br><br>
     
-    <?php echo $_SESSION["display_name"]; ?>
+    <?php echo $_SESSION["username"]; ?>
     Home
 </div>
 
