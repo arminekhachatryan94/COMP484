@@ -27,8 +27,11 @@ if( !empty($_POST)){
         for( $i = 0; $i < sizeof($result); $i++ ){
             $db_username=$result[$i]["username"];
             $db_password=$result[$i]["password"];
-            if( ($db_username == $username )
-               and ($db_password == $password) ){
+            if( ($db_username == $username ) and ($db_password == $password) ){
+                // create shopping cart
+                $_SESSION["mycart"] = array();
+                $_SESSION["cart_size"] = 0;
+                
                 $_SESSION["username"] = $username;
                 $_SESSION["password"] = $password;
                 $_SESSION["user_id"] = $result[$i]["user_id"];
