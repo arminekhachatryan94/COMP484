@@ -7,8 +7,8 @@
             <a href="index.php" class="h1 text-white" style="padding:10px;">Tsarbucks</a>
             
             <a href="<?php
-                     if( !empty($_SESSION["display_name"]) ){
-                         if( $_SESSION["display_name"] == "Barista" ){
+                     if( !empty($_SESSION["user_role"]) ){
+                         if( $_SESSION["user_role"] == "barista" ){
                              echo "barista_home.php";
                          }
                          else{
@@ -25,7 +25,7 @@
             
             <!-- Barista -->
             <?php
-            if( !empty($_SESSION["display_name"]) && $_SESSION["display_name"] == "Barista" ){ ?>
+            if( !empty($_SESSION["user_role"]) && $_SESSION["user_role"] == "barista" ){ ?>
             <a href="barista_pending.php" class="text-white" style="padding:10px;">
                 <span class="glyphicon glyphicon-book"></span>
                 Pending Orders
@@ -34,7 +34,7 @@
             
             <!-- Customer -->
             <?php
-            if( !empty($_SESSION["display_name"]) && $_SESSION["display_name"] == "Customer" ){ ?>
+            if( !empty($_SESSION["user_role"]) && $_SESSION["user_role"] == "customer" ){ ?>
             <a href="customer_menu.php" class="text-white" style="padding:10px;">
                 <span class="glyphicon glyphicon-book"></span>
                 Menu
@@ -50,8 +50,8 @@
         <div class="col-md-4 text-right">
             <!-- right -->
             <?php
-            if( !empty($_SESSION["display_name"]) ){
-                if( $_SESSION["display_name"] == "Barista" ){ ?>
+            if( !empty($_SESSION["user_role"]) ){
+                if( $_SESSION["user_role"] == "barista" ){ ?>
                     <a href="barista_home.php" class="text-white" style="padding:10px;">Barista</a>
                 <?php }
                 else{ ?>
@@ -61,7 +61,7 @@
 
             <!-- Customer -->
             <?php
-            if( !empty($_SESSION["display_name"]) && $_SESSION["display_name"] == "Customer" ){ ?>
+            if( !empty($_SESSION["user_role"]) && $_SESSION["user_role"] == "customer" ){ ?>
             <a href="customer_mycart.php" class="text-white" style="padding:10px;">
                 <span class="glyphicon glyphicon-shopping-cart"></span>
                 My Cart
