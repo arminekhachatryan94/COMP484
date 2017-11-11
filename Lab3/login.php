@@ -28,9 +28,23 @@ if( !empty($_POST)){
             $db_username=$result[$i]["username"];
             $db_password=$result[$i]["password"];
             if( ($db_username == $username ) and ($db_password == $password) ){
+                
                 // create shopping cart
                 $_SESSION["mycart"] = array();
                 $_SESSION["cart_size"] = 0;
+                $_SESSION["cart_total"] = 0;
+                
+                $products = $db->prepare("SELECT * FROM `tsarbucks`.`products` WHERE product_id");
+                if($products->execute()) {
+                    $items = $products->fetchAll();
+                    $_SESSION["cart_size"] = count($items);
+                    for( $j = 1; $j <= $_SESSION["cart_size"]; $j++ ){
+                        // j is id # and value is quantity
+                        $_SESSION["mycart"][$j] = 0;
+                    }
+                } else{
+                    echo "couldn't retrieve";
+                }
                 
                 $_SESSION["username"] = $username;
                 $_SESSION["password"] = $password;
@@ -38,7 +52,21 @@ if( !empty($_POST)){
                 //echo $_SESSION["username"] . "<br>";
                 //echo $_SESSION["password"];
                 
-                if( $result[$i]["display_name"] == "Barista"){
+                
+                
+                // get user role
+                $roles_table = $db->prepare("SELECT * FROM `tsarbucks`.`user_roles` WHERE user_id = " . $_SESSION["user_id"]);
+                if($roles_table->execute()) {
+                    $roles = $roles_table->fetchAll();
+                    $_SESSION["user_role"] = $roles[0]["role"];
+                } else{
+                    echo "couldn't retrieve";
+                }
+                
+                
+                
+                
+                if( $result[$i]["user_role"] == "Barista"){
                     $_SESSION["display_name"] = "Barista";
                     header("Location: barista_home.php", true); // true to replace the header
                     exit();

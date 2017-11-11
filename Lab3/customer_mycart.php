@@ -4,8 +4,13 @@
 <div class="display-1">
     <br><br><br><br>
     
-    <?php echo $_SESSION["display_name"]; ?>
-    My Cart
+    <div>My Cart</div>
+    <?php
+    echo $_SESSION["cart_size"] . "<br>";
+    for( $i = 1; $i <= $_SESSION["cart_size"]; $i++ ){
+        echo $_SESSION["mycart"][$i] . "<br>";
+    }
+    ?>
 
 </div>
 

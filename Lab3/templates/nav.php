@@ -50,19 +50,15 @@
         <div class="col-md-4 text-right">
             <!-- right -->
             <?php
-            if( !empty($_SESSION["display_name"]) ){ ?>
-            <a href="index.php" class="text-white" style="padding:10px;">
-                <?php
-                if( $_SESSION["display_name"] == "Barista" ){
-                    echo "Barista";
-                }
-                else{
-                    echo "Customer";
-                }
-                ?>
-            </a>
-            <?php } ?>
-            
+            if( !empty($_SESSION["display_name"]) ){
+                if( $_SESSION["display_name"] == "Barista" ){ ?>
+                    <a href="barista_home.php" class="text-white" style="padding:10px;">Barista</a>
+                <?php }
+                else{ ?>
+                    <a href="customer_home.php" class="text-white" style="padding:10px;">Customer</a>
+                <?php }
+            } ?>
+
             <!-- Customer -->
             <?php
             if( !empty($_SESSION["display_name"]) && $_SESSION["display_name"] == "Customer" ){ ?>
@@ -70,8 +66,8 @@
                 <span class="glyphicon glyphicon-shopping-cart"></span>
                 My Cart
                 <?php
-                    if($_SESSION["cart_size"] > 0 ){
-                        echo $_SESSION["cart_size"];
+                    if($_SESSION["cart_total"] > 0 ){
+                        echo $_SESSION["cart_total"];
                     }
                 ?>
             </a>
