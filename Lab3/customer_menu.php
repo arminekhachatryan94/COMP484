@@ -14,11 +14,10 @@ session_start();
         die("Could not connect: " . $e->getMessage());
     }
     //echo "<br><br>";
-    $user = $db->prepare("SELECT * FROM `tsarbucks`.`products` WHERE product_id");
-    if($user->execute()) {
+    $product = $db->prepare("SELECT * FROM `tsarbucks`.`products` WHERE product_id");
+    if($product->execute()) {
         // fetch all matching records and dump them to the screen
-        $result = $user->fetchAll();
-        $_SESSION["menu"] = $result;
+        $result = $product->fetchAll();
         //print_r($_SESSION["menu"]);
     }
     else{
