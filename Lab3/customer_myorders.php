@@ -53,6 +53,7 @@ for( $i = 0; $i < count($orders); $i++ ){
                         <div class="col-md-1">Price</div>
                         <div class="col-md-1">Status</div>
                     </div>
+                    <hr style="border-width: 1px; border-color:black;">
                     <div class="row text-left">
                         
                     <?php
