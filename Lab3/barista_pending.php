@@ -22,7 +22,7 @@ if($list1->execute()) {
     //print_r($_SESSION["menu"]);
 }
 else{
-    echo "couldn't retrieve";
+    echo "couldn't retrieve orders";
 }
 
 // get products
@@ -33,8 +33,20 @@ if($list2->execute()) {
     //print_r($products);
 }
 else{
-    echo "couldn't retrieve";
+    echo "couldn't retrieve products";
 }
+
+// get users
+$list3 = $db->prepare("SELECT * FROM `tsarbucks`.`users` WHERE user_id");
+if($list3->execute()) {
+    $users = $list3->fetchAll();
+    //echo count($products);
+    //print_r($products);
+}
+else{
+    echo "couldn't retrieve users";
+}
+
 
 $temp_order = 0;
 $num_orders = 0;
@@ -55,9 +67,10 @@ for( $k = 0; $k < count($orders); $k++ ){
         if( $num_orders > 0 ){
             //var_dump($orders);
             for( $i = count($orders)-1; $i >= 0; $i-- ){
+                $user_id = $orders[$i]["user_id"];
         ?>
                 <div style="background-color:white; margin:20px; padding:30px; padding-bottom:20px;">
-                    <div class="text-left h2">Order <?php echo $orders[$i]["order_id"] ?> </div>
+                    <div class="text-left h2">Order <?php echo $orders[$i]["order_id"] ?> for <?php echo $users[$user_id-1]["display_name"]; ?></div>
                     <br>
                     <div class="row text-left h4">
                         <div class="col-md-4">Product Name</div>
@@ -89,7 +102,10 @@ for( $k = 0; $k < count($orders); $k++ ){
                                 <div class="col-md-2"><?php echo $size; ?></div>
                                 <div class="col-md-2"><?php echo $quantity; ?></div>
                                 <div class="col-md-1">$<?php echo number_format($price, 2); ?></div>
-                                <button class="col-md-2 btn-success" style="padding:4px;">Mark Complete</button>
+                                <button class="col-md-2 btn-success" style="padding:4px;">
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                    Mark Complete
+                                </button>
                         <?php
                         }
                     } ?>
