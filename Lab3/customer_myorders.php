@@ -111,6 +111,3 @@ for( $i = 0; $i < count($orders); $i++ ){
 </div>
 
 <?php include "templates/footer.php"; ?>
-
-<?php
-?>

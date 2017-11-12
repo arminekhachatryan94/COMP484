@@ -4,7 +4,19 @@
     <div class="row h4" style="display:inline;">
         <div class="col-md-8 text-left">
             <!-- left -->
-            <a href="index.php" class="h1 text-white" style="padding:10px;">Tsarbucks</a>
+            <a href="<?php
+                     if( !empty($_SESSION["user_role"]) ){
+                         if( $_SESSION["user_role"] == "barista" ){
+                             echo "barista_home.php";
+                         }
+                         else{
+                             echo "customer_home.php";
+                         }
+                     }
+                     else{
+                         echo "index.php";
+                     }
+                    ?>" class="h1 text-white" style="padding:10px;">Tsarbucks</a>
             
             <a href="<?php
                      if( !empty($_SESSION["user_role"]) ){

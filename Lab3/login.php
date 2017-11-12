@@ -66,7 +66,7 @@ if( !empty($_POST)){
                 
                 
                 
-                if( $result[$i]["user_role"] == "Barista"){
+                if( $_SESSION["user_role"] == "barista"){
                     $_SESSION["display_name"] = "Barista";
                     header("Location: barista_home.php", true); // true to replace the header
                     exit();

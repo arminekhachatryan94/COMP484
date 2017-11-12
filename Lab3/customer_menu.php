@@ -1,4 +1,3 @@
-<!-- add stylesheets and scripts !-->
 <?php
 session_start();
 
@@ -25,12 +24,14 @@ session_start();
         echo "couldn't retrieve";
     }
 
-// add to cart function
-function addToCart( $id ){
-    $item = $_SESSION["mycart"][$id];
-    $total = $_SESSION["cart_total"];
-    $_SESSION["mycart"][$id] = $item + 1;
-    $_SESSION["cart_total"] = $total + 1;
+if( isset($_POST["id"]) && isset($_POST["submit"]) ){
+    $id = $_POST["id"];
+    $_SESSION["mycart"][$id]++;
+    $_SESSION["cart_total"]++;
+    echo $_SESSION["mycart"][$id];
+    echo $_SESSION["cart_total"];
+    $_POST["id"] = null;
+    $_POST["submit"] = null;
 }
 
 ?>
@@ -52,12 +53,16 @@ function addToCart( $id ){
             <div class="col-md-6" style="padding: 10px;"><?php echo $result[$i]["display_name"]; ?></div>
             <div class="col-md-1" style="padding: 10px;"><?php echo $result[$i]["price"]; ?></div>
             <div class="col-md-2" style="padding: 10px;"><?php echo $result[$i]["size"]; ?></div>
-            <a href="customer_menu.php" onClick="addToCart( <?php echo $id; ?>);" class="col-md-2" style="padding: 10px;"><button class="btn-primary" style="padding:5px;padding-left:20px;padding-right:20px;">Add to Cart</button></a>
+            <form method="POST" class="col-md-2" style="padding: 10px;">
+                <input type="submit" name="submit" value="Add to Cart" class="btn-primary" style="padding: 5px;padding-left:20px;padding-right:20px;" action="customer_menu.php/id=<?php echo $id; ?>">
+            </form>
+            <!--a href="customer_menu.php/id=<!--?php echo $id; ?>" class="col-md-2" style="padding: 10px;"><button class="btn-primary" style="padding:5px;padding-left:20px;padding-right:20px;">Add to Cart</button></a-->
         </div>
         <?php
         }
         ?>
     </div>
+    <?php echo $_SESSION["mycart"][$i]; $_SESSION["cart_total"]; ?>
 </div>
 
 <?php include "templates/footer.php"; ?>
