@@ -24,15 +24,6 @@ session_start();
         echo "couldn't retrieve";
     }
 
-if( isset($_POST["id"]) && isset($_POST["submit"]) ){
-    $id = $_POST["id"];
-    $_SESSION["mycart"][$id]++;
-    $_SESSION["cart_total"]++;
-    echo $_SESSION["mycart"][$id];
-    echo $_SESSION["cart_total"];
-    $_POST["id"] = null;
-    $_POST["submit"] = null;
-}
 
 ?>
 <?php include "templates/head.php"; ?>
@@ -53,16 +44,20 @@ if( isset($_POST["id"]) && isset($_POST["submit"]) ){
             <div class="col-md-6" style="padding: 10px;"><?php echo $result[$i]["display_name"]; ?></div>
             <div class="col-md-1" style="padding: 10px;"><?php echo $result[$i]["price"]; ?></div>
             <div class="col-md-2" style="padding: 10px;"><?php echo $result[$i]["size"]; ?></div>
-            <form method="POST" class="col-md-2" style="padding: 10px;">
-                <input type="submit" name="submit" value="Add to Cart" class="btn-primary" style="padding: 5px;padding-left:20px;padding-right:20px;" action="customer_menu.php/id=<?php echo $id; ?>">
-            </form>
             <!--a href="customer_menu.php/id=<!--?php echo $id; ?>" class="col-md-2" style="padding: 10px;"><button class="btn-primary" style="padding:5px;padding-left:20px;padding-right:20px;">Add to Cart</button></a-->
+            
+            <!--form method="POST" onClick="window.location='?id=<!--?php echo $id; ?>'" class="col-md-2" style="padding: 10px;">
+                <input type="submit" name="submit" value="Add to Cart" class="btn-primary" style="padding: 5px;padding-left:20px;padding-right:20px;">
+            </form-->
+            <form method="POST" action="add.php" class="col-md-2" style="padding: 10px;">
+                <input type="hidden" name="id" value="<?php echo $id; ?>">
+                <input type="submit" name="submit" value="Add to Cart" class="btn-primary" style="padding: 5px;padding-left:20px;padding-right:20px;">
+            </form>
         </div>
         <?php
         }
         ?>
     </div>
-    <?php echo $_SESSION["mycart"][$i]; $_SESSION["cart_total"]; ?>
 </div>
 
 <?php include "templates/footer.php"; ?>

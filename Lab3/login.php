@@ -94,7 +94,7 @@ if( !empty($_POST)){
         echo "couldn't retrieve";
     }
 }
-    ?>
+?>
 
 <!-- add stylesheets and scripts !-->
 <?php include "templates/head.php"; ?>

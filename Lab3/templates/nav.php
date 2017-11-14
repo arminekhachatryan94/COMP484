@@ -1,6 +1,5 @@
 <nav class="navig container-fluid">
     
-    
     <div class="row h4" style="display:inline;">
         <div class="col-md-8 text-left">
             <!-- left -->
