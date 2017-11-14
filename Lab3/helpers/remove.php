@@ -1,10 +1,12 @@
 <?php
 session_start();
 
-// add item to cart
+// remove item from cart
 $id = $_POST["id"];
-$_SESSION["mycart"][$id]++;
-$_SESSION["cart_total"]++;
+$quantity=$_POST["quantity"];
+$_SESSION["cart_total"]-=$quantity;
+$_SESSION["mycart"][$id]=0;
+
 //echo "Location: http://csun.edu"; // true to replace the header
 //echo 2;
 
@@ -15,7 +17,7 @@ $_SESSION["cart_total"]++;
 
 <html>
 <head>
-    <meta http-equiv="refresh" content="0; url=customer_menu.php"/>
+    <meta http-equiv="refresh" content="0; url=../customer_mycart.php"/>
 </head>
 <body>
 <!-- #! /usr/local/bin/php -->

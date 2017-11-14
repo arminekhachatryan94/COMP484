@@ -59,7 +59,7 @@ session_start();
                 <div class="col-md-1" style="padding: 10px;">$<?php echo number_format($price, 2); ?></div>
                 <div class="col-md-2 text-center" style="padding: 10px;"><?php echo $size; ?></div>
                 <div class="col-md-2 text-center" style="padding: 10px;"><?php echo $quantity; ?></div>
-                <form method="POST" action="remove.php" class="col-md-2" style="padding: 10px;">
+                <form method="POST" action="helpers/remove.php" class="col-md-2" style="padding: 10px;">
                     <input type="hidden" name="id" value="<?php echo $i; ?>">
                     <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
                     <input type="submit" name="submit" value="Remove from Cart" class="btn-danger" style="padding: 5px;padding-left:20px;padding-right:20px;">
@@ -67,12 +67,14 @@ session_start();
             </div>
             <?php
             }
-        }        
+        }
         ?>
         <br>
         <div class="text-left" style="padding-bottom:10px;"><b>Total Cost: $<?php echo number_format($price_total, 2); ?></b></div>
         <div class="text-left"><b>Total Size: <?php echo $size_total; ?> ounces</b></div>
-        
+        <form method="POST" action="helpers/submit_order.php" class="col-md-2 text-left" style="padding: 10px;">
+            <input type="submit" name="submit" value="Submit Order" class="btn-primary" style="padding: 5px;padding-left:20px;padding-right:20px;">
+        </form>
     </div>
     <?php
     } else{?>

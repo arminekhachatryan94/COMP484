@@ -49,7 +49,7 @@ session_start();
             <!--form method="POST" onClick="window.location='?id=<!--?php echo $id; ?>'" class="col-md-2" style="padding: 10px;">
                 <input type="submit" name="submit" value="Add to Cart" class="btn-primary" style="padding: 5px;padding-left:20px;padding-right:20px;">
             </form-->
-            <form method="POST" action="add.php" class="col-md-2" style="padding: 10px;">
+            <form method="POST" action="helpers/add.php" class="col-md-2" style="padding: 10px;">
                 <input type="hidden" name="id" value="<?php echo $id; ?>">
                 <input type="submit" name="submit" value="Add to Cart" class="btn-primary" style="padding: 5px;padding-left:20px;padding-right:20px;">
             </form>
