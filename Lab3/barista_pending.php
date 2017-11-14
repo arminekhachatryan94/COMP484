@@ -60,7 +60,7 @@ for( $k = 0; $k < count($orders); $k++ ){
 <?php include "templates/head.php"; ?>
 
 <div class="page text-center" style="width:90%">
-    <div class="display-1 font-weight-normal">My Orders</div>
+    <div class="display-1 font-weight-normal">Pending Orders</div>
     <div class="h5">
         <?php
         //echo $num_orders;
@@ -93,19 +93,26 @@ for( $k = 0; $k < count($orders); $k++ ){
                             $order_id = $orders[$j]["order_id"];
                             $product_id = $orders[$j]["product_id"];
                             $quantity = $orders[$j]["quantity"];
-                            $price = $quantity * $products[$product_id-1]["price"];
+                            $price = $products[$product_id-1]["price"];
                             $size = $products[$product_id-1]["size"];
-                            $total_price += $price;
+                            $pq = $price * $quantity;
+                            $total_price += $pq;
                             $total_size += $size;
                         ?>
-                                <div class="col-md-4"><?php echo $products[$product_id-1]["display_name"]; ?></div>
-                                <div class="col-md-2"><?php echo $size; ?></div>
-                                <div class="col-md-2"><?php echo $quantity; ?></div>
-                                <div class="col-md-1">$<?php echo number_format($price, 2); ?></div>
-                                <button class="col-md-2 btn-success" style="padding:4px;">
+                            <div class="col-md-4"><?php echo $products[$product_id-1]["display_name"]; ?></div>
+                            <div class="col-md-2"><?php echo $size; ?></div>
+                            <div class="col-md-2"><?php echo $quantity; ?></div>
+                            <div class="col-md-1">$<?php echo number_format($price, 2); ?></div>
+                            <form method="POST" action="helpers/mark_complete.php" class="col-md-2" style="padding: 10px;">
+                                <input type="hidden" name="user_id" value="<?php echo $orders[$i]["user_id"]; ?>">
+                                <input type="hidden" name="order_id" value="<?php echo $orders[$i]["order_id"]; ?>">
+                                <input type="hidden" name="product_id" value="<?php echo $orders[$i]["product_id"]; ?>">
+                                <input type="submit" name="submit" value="Mark Complete" class="btn-success" style="padding: 5px;padding-left:10px;padding-right:20px;">
+                            </form>
+                                <!--button class="col-md-2 btn-success" style="padding:4px;">
                                     <span class="glyphicon glyphicon-ok"></span>
                                     Mark Complete
-                                </button>
+                                </button-->
                         <?php
                         }
                     } ?>

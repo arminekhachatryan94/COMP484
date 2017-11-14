@@ -14,7 +14,7 @@ session_start();
         die("Could not connect: " . $e->getMessage());
     }
     //echo "<br><br>";
-    $list1 = $db->prepare("SELECT * FROM `tsarbucks`.`orders` WHERE user_id = " . $_SESSION['user_id']);
+    $list1 = $db->prepare("SELECT * FROM `tsarbucks`.`orders` WHERE user_id = " . $_SESSION["user_id"]);
     if($list1->execute()) {
         // fetch all matching records and dump them to the screen
         $orders = $list1->fetchAll();
@@ -27,8 +27,9 @@ session_start();
 
 // get number of orders
 $num_orders = 0;
+//echo count($orders);
 for( $i = 0; $i < count($orders); $i++ ){
-    if( $num_orders < $orders[$i]["order_id"] ){
+    if( ($num_orders < $orders[$i]["order_id"]) && ($_SESSION["user_id"] == $orders[$i]["user_id"]) ){
         $num_orders = $orders[$i]["order_id"];
     }
 }
