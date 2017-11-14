@@ -72,8 +72,9 @@ for( $i = 0; $i < count($orders); $i++ ){
                                 
                                 $price = $orders[$j]["quantity"]*$product[0]["price"];
                                 $size = $product[0]["size"];
+                                $overall_size = $orders[$j]["quantity"]*$size;
                                 $total_price += $price;
-                                $total_size += $size;
+                                $total_size += $overall_size;
                                 
                                 ?>
                                 <div class="col-md-4"><?php echo $product[0]["display_name"]; ?></div>

@@ -45,9 +45,9 @@ for( $j = 1; $j <= $_SESSION["cart_size"]; $j++ ){
         $product_id = $j;
         $quantity = $_SESSION["mycart"][$j];
         $orders = $db->prepare("INSERT INTO `tsarbucks`.`orders` (order_id, user_id, product_id, quantity, completed, created_at, updated_at) VALUES (?,?,?,?,?,?,?)");
-        if($orders->execute([$order_id, $user_id, $product_id, $quantity, 0, NULL, NULL])) {
-           echo "New record successfully added into the drinks table";
-        }else{
+        if($orders->execute([$order_id, $user_id, $product_id, $quantity, 0, NULL, NULL])) { ?>
+        <meta http-equiv="refresh" content="0; url=../order_success_submit.php"/>
+        <?php }else{
             echo "couldn't insert";
         }
     }
@@ -59,7 +59,7 @@ $_SESSION["cart_total"] = 0;
 
 <html>
 <head>
-    <meta http-equiv="refresh" content="0; url=../customer_menu.php"/>
+    <meta http-equiv="refresh" content="0; url=../order_success_submit.php"/>
 </head>
 <body>
 <!-- #! /usr/local/bin/php -->
