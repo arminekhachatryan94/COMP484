@@ -34,11 +34,11 @@ session_start();
     if( $_SESSION["cart_total"] > 0 ){ ?>
     <div class="h4">
         <div class="row text-left font-weight-bold h3">
-            <div class="col-md-5" style="padding: 10px;">Product Name</div>
+            <div class="col-md-4" style="padding: 10px;">Product Name</div>
             <div class="col-md-1" style="padding: 10px;">Price</div>
             <div class="col-md-2 text-center" style="padding: 10px;">Size (oz)</div>
             <div class="col-md-2 text-center" style="padding: 10px;">Quantity</div>
-            <div class="col-md-1" style="padding: 10px;"></div>
+            <div class="col-md-2" style="padding: 10px;"></div>
         </div>
         <?php
         //print_r($result);
@@ -55,11 +55,22 @@ session_start();
                 $price_total += ($price * $quantity);
                 $size_total += ($size * $quantity);
                 ?>
-                <div class="col-md-5" style="padding: 10px;"><?php echo $result[$i-1]["display_name"]; ?></div>
+                <div class="col-md-4" style="padding: 10px;"><?php echo $result[$i-1]["display_name"]; ?></div>
                 <div class="col-md-1" style="padding: 10px;">$<?php echo number_format($price, 2); ?></div>
                 <div class="col-md-2 text-center" style="padding: 10px;"><?php echo $size; ?></div>
                 <div class="col-md-2 text-center" style="padding: 10px;"><?php echo $quantity; ?></div>
-                <form method="POST" action="helpers/remove.php" class="col-md-1" style="padding: 10px;">
+                <!-- decrement -->
+                <form method="POST" action="helpers/decrement.php" class="" style="display:inline-block; margin: 5px;">
+                    <input type="hidden" name="id" value="<?php echo $i; ?>">
+                    <input type="submit" name="submit" value="-" class="btn-primary" style="display:inline-block;">
+                </form>
+                <!-- increment -->
+                <form method="POST" action="helpers/increment.php" class="" style="display:inline-block; margin: 5px;">
+                    <input type="hidden" name="id" value="<?php echo $i; ?>">
+                    <input type="submit" name="submit" value="+" class="btn-primary" style="display:inline-block;">
+                </form>
+                <!-- remove -->
+                <form method="POST" action="helpers/remove.php" class="col-md-2" style="padding: 10px;">
                     <input type="hidden" name="id" value="<?php echo $i; ?>">
                     <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
                     <input type="submit" name="submit" value="Remove from Cart" class="btn-danger" style="padding: 5px;padding-left:20px;padding-right:20px;">
