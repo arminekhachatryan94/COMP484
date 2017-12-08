@@ -2,6 +2,7 @@ var id = 'null';
 var busy;
 var socket = io('http://localhost:3000', {path: '/socket.io'}); // connect to server
 
+var cards = [];
 socket.on('id', function(data) { // listen for fromServer message
     id = data.id;
     console.log('My id: ' + id);
@@ -19,5 +20,19 @@ $(document).ready(function(){
     $('#game-btn').click( function(){
         // hide start button
         $(this).css('visibility', 'hidden');
+        socket.emit('start', {start: 'true'});
     });
+
+    socket.on('cards', function(data) {
+        var card1 = data.card1;
+        var card2 = data.card2;
+        
+    });
+
+    /*
+    // click hit
+    socket.on('card', function(data) {
+        card = data.card;
+    });
+    */
 });
