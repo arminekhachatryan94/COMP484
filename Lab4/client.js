@@ -12,7 +12,7 @@ socket.on('id', function(data) { // listen for fromServer message
             '<br><br><div class="display-1 col-md-6 text-white" style="margin-left:50px;">Sorry, game is full. Please try again later.</div>');        
     }
     else{
-        $('#game-btn').html('<button class="display-4 btn-success text-center">Start Game</button>');        
+        $('#game-btn').html('<br><br><button class="display-1 btn-success text-center" style="margin-left:50px;">Start Game</button>');        
     }
 });
 
@@ -22,11 +22,11 @@ $(document).ready(function(){
         $(this).css('visibility', 'hidden');
         socket.emit('start', {start: 'true'});
     });
-
     socket.on('cards', function(data) {
         var card1 = data.card1;
         var card2 = data.card2;
-        
+        console.log(card1);
+        console.log(card2);
     });
 
     /*
