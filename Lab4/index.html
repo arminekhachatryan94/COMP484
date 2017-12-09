@@ -17,20 +17,32 @@
     <header>
         <nav class="bg-danger text-white" style="padding:10px">
             <div class="row">
-                <div class="col-md-4 display-4" style="display:inline">Blackjack</div>
-                <div class="col-md-8 text-right">
-                    <div id="player_id" class="col-md-4 display-4" style="display:inline"></div>
-                    <div id="game_type" class="col-md-4 display-4" style="display:inline"></div>
+                <div class="col-lg-4 display-4" style="display:inline">Blackjack</div>
+                <div class="col-lg-8 text-right">
+                    <div id="player_id" class="col-lg-4 display-4" style="display:inline"></div>
+                    <div id="game_type" class="col-lg-4 display-4" style="display:inline"></div>
                 </div>
             </div>
         </nav>
     </header>
-    <main>
+    <main style="margin-top:80px;">
         <div id="game-btn"></div>
-        <div id="game">
-            <div id="dealer-cards"></div>
-            <div id="my-cards"></div>
-            <div id="other-cards"></div>
+        <div id="game" style="visibility: hidden;">
+            <div class="col" style="padding:30px;">
+                <div class="row" style="background-color: rgb(0, 0, 68);">
+                    <div id="dealer-cards" class="col text-center" style="padding:10px;">
+                        <div class="text-white font-weight-bold">Dealer's cards</div>
+                    </div>
+                </div>
+                <div class="row text-center" style="background-color:darkorange">
+                    <div id="my-cards" class="col-xs-6" style="display:inline; padding:20px;">
+                        <div class="font-weight-bold">My Cards</div>
+                    </div>
+                    <div id="other-cards" class="col-xs-6" style="display:inline; padding:20px;">
+                        <div class="font-weight-bold">Other Player's Cards</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
     <footer>
