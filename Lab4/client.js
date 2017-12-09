@@ -8,7 +8,7 @@ socket.on('id', function(data) { // listen for fromServer message
     console.log('My id: ' + id);
 
     if( id == 'null' ){
-        $('#game').html(
+        $('#game').append(
             '<br><br><div class="display-1 col-md-6 text-white" style="margin-left:50px;">Sorry, game is full. Please try again later.</div>');        
     }
     else{
@@ -16,17 +16,23 @@ socket.on('id', function(data) { // listen for fromServer message
     }
 });
 
+socket.on('cards', function(data) {
+    let card1 = data.card1;
+    let card2 = data.card2;
+    cards.push(card1);
+    cards.push(card2);
+    console.log(card1);
+    console.log(card2);
+    $('#my-cards').append('<img src="images/' + card1[0] + card1[1] + '.png">');
+    $('#my-cards').append('<img src="images/' + card2[0] + card2[1] + '.png">');    
+    console.log('executed');
+});
+
 $(document).ready(function(){
     $('#game-btn').click( function(){
         // hide start button
         $(this).css('visibility', 'hidden');
         socket.emit('start', {start: 'true'});
-    });
-    socket.on('cards', function(data) {
-        var card1 = data.card1;
-        var card2 = data.card2;
-        console.log(card1);
-        console.log(card2);
     });
 
     /*

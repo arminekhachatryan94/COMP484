@@ -5,21 +5,21 @@ let io = require('socket.io')(app, {path: '/socket.io'}); // bind Socket to HTTP
 app.listen(3000); // listen on port 3000
 
 /*
-let cards = [ // Sp = Spades, H = Hearts, St = Stars, D = Diamonds
-    'SpA', 'Sp1', 'Sp2', 'Sp3', 'Sp4', 'Sp5', 'Sp6', 'Sp7', 'Sp8', 'Sp9', 'Sp10', 'SpJ', 'SpQ', 'SpK',
+let cards = [ // S = Spades, H = Hearts, C = Clubs, D = Diamonds
+    'SA', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'SJ', 'SQ', 'SK',
     'HA', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'HJ', 'HQ', 'HK',
-    'StA', 'St1', 'St2', 'St3', 'St4', 'St5', 'St6', 'St7', 'St8', 'St9', 'St10', 'StJ', 'StQ', 'StK',
+    'CA', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'CJ', 'CQ', 'CK',
     'DA', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'DJ', 'DQ', 'DK'
 ];
 */
 
-let temp = [ // Sp = Spades, H = Hearts, St = Stars, D = Diamonds
-    ['Sp', 'A'] , ['Sp', '1'] , ['Sp', '2'] , ['Sp', '3'] , ['Sp', '4'] , ['Sp', '5'] , ['Sp', '6'] ,
-    ['Sp', '7'] , ['Sp', '8'] , ['Sp', '9'] , ['Sp', '10'] , ['Sp', 'J'] , ['Sp', 'Q'] , ['Sp', 'K'] ,
+let temp = [ // Sp = Spades, H = Hearts, C = Clubs, D = Diamonds
+    ['S', 'A'] , ['S', '1'] , ['S', '2'] , ['S', '3'] , ['S', '4'] , ['S', '5'] , ['S', '6'] ,
+    ['S', '7'] , ['S', '8'] , ['S', '9'] , ['S', '10'] , ['S', 'J'] , ['S', 'Q'] , ['S', 'K'] ,
     ['H', 'A'] , ['H', '1'] , ['H', '2'] , ['H', '3'] , ['H', '4'] , ['H', '5'] , ['H', '6'] ,
     ['H', '7'] , ['H', '8'] , ['H', '9'] , ['H', '10'] , ['H', 'J'] , ['H', 'Q'] , ['H', 'K'] ,
-    ['St', 'A'] , ['St', '1'] , ['St', '2'] , ['St', '3'] , ['St', '4'] , ['St', '5'] , ['St', '6'] ,
-    ['St', '7'] , ['St', '8'] , ['St', '9'] , ['St', '10'] , ['St', 'J'] , ['St', 'Q'] , ['St', 'K'] ,
+    ['C', 'A'] , ['C', '1'] , ['C', '2'] , ['C', '3'] , ['C', '4'] , ['C', '5'] , ['C', '6'] ,
+    ['C', '7'] , ['C', '8'] , ['C', '9'] , ['C', '10'] , ['C', 'J'] , ['C', 'Q'] , ['C', 'K'] ,
     ['D', 'A'] , ['D', '1'] , ['D', '2'] , ['D', '3'] , ['D', '4'] , ['D', '5'] , ['D', '6'] ,
     ['D', '7'] , ['D', '8'] , ['D', '9'] , ['D', '10'] , ['D', 'J'] , ['D', 'Q'] , ['D', 'K']
 ];
@@ -72,27 +72,33 @@ io.on('connection', function(socket) {
                 shuffle(cards2); // randomize array
 
                 // initialize dealer cards
-                var d_card1 = cards2[0];
-                var d_card2 = cards2[1];
+                let d_card1 = cards2[0];
+                let d_card2 = cards2[1];
                 myCards.push(d_card1);
                 myCards.push(d_card2);
-                clients.splice(0, 2);
+                cards2.splice(0, 2);
                 mySum += translateCard(d_card1[1], mySum);
                 mySum += translateCard(d_card2[1], mySum);
                 console.log(d_card1);
                 console.log(d_card2);
                 console.log(mySum);
-
+                
                 // initialize clients cards
-                for( var i = 0; i < clients.length; i++ ){
-                    var c_card1 = cards2[0];
-                    var c_card2 = cards2[1];
+                for( let i = 0; i < clients.length; i++ ){
+                    let c_card1 = cards2[0];
+                    let c_card2 = cards2[1];
+                    
                     myCards.push(c_card1);
                     myCards.push(c_card2);
-                    io.sockets.connected[socket.id].emit('cards', {card1: c_card1, card2: c_card2});                    
+                    cards2.splice(0, 2);
+                    
                     console.log(c_card1);
                     console.log(c_card2);
+                    console.log(clients[i]);
+
+                    io.sockets.connected[clients[i]].emit('cards', {card1: c_card1, card2: c_card2});    
                 }
+
             }
             else{
                 console.log('Waiting for other component...');
