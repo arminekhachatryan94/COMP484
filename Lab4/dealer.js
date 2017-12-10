@@ -109,6 +109,7 @@ io.on('connection', function(socket) {
                     }
                     if( clients_sums[i] > 21 ){ // if client busts
                         losers.push(clients[i]);
+                        clients.splice(i, 1); // delete client from game
                     }
                 }
 
@@ -140,6 +141,14 @@ io.on('connection', function(socket) {
                 console.log('Waiting for other component...');
             }
         }
+    });
+
+    socket.on('hit', function(data){
+        console.log(data.id);
+    });
+
+    socket.on('stand', function(data){
+        console.log(data.id);
     });
 
     socket.on('disconnect', function(){

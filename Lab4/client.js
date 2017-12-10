@@ -6,6 +6,8 @@ var cards = [];
 var mySum = 0;
 var partnerSum = 0;
 
+var i_lost = false;
+
 socket.on('id', function(data) { // listen for fromServer message
     id = data.id;
     console.log('My id: ' + id);
@@ -64,9 +66,10 @@ socket.on('cards', function(data) {
             for( var i = 0; i < losers.length; i++ ){
                 if( losers[i] != 'dealer' && losers[i] == id ){
                     $('#loser').append('You busted!');
+                    i_lost = true;
                 }
                 else if( losers[i] != 'dealer' && losers[i] != id ){
-                    $('#loser').append('Your partner busted!');                    
+                    $('#loser').append('Your partner busted!');
                 }
             }
         }
@@ -91,14 +94,20 @@ socket.on('cards', function(data) {
 
 $(document).ready(function(){
     $('#game-btn').click( function(){
-        //var refresh = '<div class="text-white font-weight-bold">Dealer' + "'s cards</div>";
-        //$('#dealer-cards').html(refresh);
-        //console.log(refresh);
-    
         // hide start button
         $(this).css('visibility', 'hidden');
         $('#game').css('visibility', 'visible');
         socket.emit('start', {start: 'true'});
+    });
+
+    $('#hit').click( function(){
+        $(this).css('visibility', 'hidden');
+        socket.emit('hit', {id: id});
+    });
+
+    $('#stand').click( function(){
+        $(this).css('visibility', 'hidden');        
+        socket.emit('hit', {id: id});
     });
 
     /*
