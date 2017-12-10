@@ -37,9 +37,21 @@
                 <div class="row text-center" style="background-color:darkorange">
                     <div id="my-cards" class="col-xs-6" style="display:inline; padding:20px;">
                         <div class="font-weight-bold">My Cards</div>
+                        <div id="myHand"></div>
                     </div>
-                    <div id="other-cards" class="col-xs-6" style="display:inline; padding:20px;">
+                    <div id="other-cards" class="col-xs-6" style="display:inline; padding:20px; visibility:hidden;">
                         <div class="font-weight-bold">Other Player's Cards</div>
+                        <div id="partnerHand"></div>
+                    </div>
+                </div>
+                <div id="winner" class="row"></div>
+                <div id="loser" class="row"></div>                
+                <div id="buttons" class="row" style="visibility: hidden">
+                    <div class="col-xs-6">
+                        <button>Hit</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button>Stand</button>
                     </div>
                 </div>
             </div>

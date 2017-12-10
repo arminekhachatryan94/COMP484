@@ -70,23 +70,15 @@ io.on('connection', function(socket) {
                 // Game
                 cards2 = temp;
                 shuffle(cards2); // randomize array
-
-                // initialize dealer cards
-                let d_card1 = cards2[0];
-                let d_card2 = cards2[1];
-                myCards.push(d_card1);
-                myCards.push(d_card2);
-                cards2.splice(0, 2);
-                mySum += translateCard(d_card1[1], mySum);
-                mySum += translateCard(d_card2[1], mySum);
-                console.log(d_card1);
-                console.log(d_card2);
-                console.log(mySum);
                 
-                dealer = []; // temp dealer cards
-                dealer.push(d_card1);
-                dealer.push(d_card2);                
-                send = []; // temp client send cards
+                send = []; // temp client cards to send
+
+                clients_sums = [];
+                clients_sums[0] = 0;
+                clients_sums[1] = 0;
+
+                var winner = "";
+                var losers = [];
 
                 // initialize clients cards
                 for( let i = 0; i < clients.length; i++ ){
@@ -96,9 +88,13 @@ io.on('connection', function(socket) {
                     };
                     let c_card2 = {
                         card: cards2[1],
-                        id: clients[i]    
+                        id: clients[i]
                     };
-                    
+
+                    // add card values to sum
+                    clients_sums[i] += translateCard(c_card1.card[0][1], clients_sums[i]);
+                    clients_sums[i] += translateCard(c_card2.card[0][1], clients_sums[i]);     
+
                     send.push(c_card1);
                     send.push(c_card2);
                     
@@ -108,9 +104,35 @@ io.on('connection', function(socket) {
                     console.log(c_card2);
                     console.log(clients[i]);
 
+                    if( clients_sums[i] == 21 ){ // if client wins
+                        winner = clients[i];
+                    }
+                    if( clients_sums[i] > 21 ){ // if client busts
+                        losers.push(clients[i]);
+                    }
                 }
+
+                 // initialize dealer cards
+                 let d_card1 = cards2[0];
+                 let d_card2 = cards2[1];
+                 myCards.push(d_card1);
+                 myCards.push(d_card2);
+                 cards2.splice(0, 2);
+                 mySum += translateCard(d_card1[1], mySum);
+                 mySum += translateCard(d_card2[1], mySum);
+                 console.log(d_card1);
+                 console.log(d_card2);
+                 console.log(mySum);
+
+                if( mySum == 21 ){ // if dealer wins
+                    winner = 'dealer';
+                }
+                else if( mySum > 21 ){ // if dealer busts
+                    loser.push('dealer');
+                }
+
                 for( let i = 0; i < clients.length; i++ ){
-                    io.sockets.connected[clients[i]].emit('cards', {dealer: dealer, clients: send});
+                    io.sockets.connected[clients[i]].emit('cards', {dealer: myCards, clients: send, winner: winner, losers: losers });
                 }
 
             }
@@ -129,6 +151,7 @@ io.on('connection', function(socket) {
         }
         mySum = 0;
         cards2 = temp;
+        myCards = [];
     });
 
     if( clients.length == 0 ){
