@@ -31,6 +31,8 @@ let player2 = null;
 let started = false;
 let started_users = 0;
 
+let turns = [];
+
 console.log('Listening for connections on port 3000');
 
 var clients = [];
@@ -68,7 +70,7 @@ io.on('connection', function(socket) {
                 console.log('game started! Have fun!');
                 
                 // Game
-                cards2 = temp;
+                cards2 = temp.slice(); // copy temp content into cards2
                 shuffle(cards2); // randomize array
                 
                 send = []; // temp client cards to send
@@ -92,9 +94,9 @@ io.on('connection', function(socket) {
                     };
 
                     // add card values to sum
-                    clients_sums[i] += translateCard(c_card1.card[0][1], clients_sums[i]);
-                    clients_sums[i] += translateCard(c_card2.card[0][1], clients_sums[i]);     
-
+                    clients_sums[i] += translateCard(c_card1.card[1], clients_sums[i]);
+                    clients_sums[i] += translateCard(c_card2.card[1], clients_sums[i]);
+                    
                     send.push(c_card1);
                     send.push(c_card2);
                     
@@ -103,6 +105,7 @@ io.on('connection', function(socket) {
                     console.log(c_card1);
                     console.log(c_card2);
                     console.log(clients[i]);
+                    console.log('Sum: ' + clients_sums[i]);
 
                     if( clients_sums[i] == 21 ){ // if client wins
                         winner = clients[i];
@@ -111,31 +114,36 @@ io.on('connection', function(socket) {
                         losers.push(clients[i]);
                         clients.splice(i, 1); // delete client from game
                     }
+
+                    turns.push(clients[i]);
                 }
 
-                 // initialize dealer cards
-                 let d_card1 = cards2[0];
-                 let d_card2 = cards2[1];
-                 myCards.push(d_card1);
-                 myCards.push(d_card2);
-                 cards2.splice(0, 2);
-                 mySum += translateCard(d_card1[1], mySum);
-                 mySum += translateCard(d_card2[1], mySum);
-                 console.log(d_card1);
-                 console.log(d_card2);
-                 console.log(mySum);
+                // initialize dealer cards
+                let d_card1 = cards2[0];
+                let d_card2 = cards2[1];
+                myCards.push(d_card1);
+                myCards.push(d_card2);
+                cards2.splice(0, 2);
+                mySum += translateCard(d_card1[1], mySum);
+                mySum += translateCard(d_card2[1], mySum);
+
+                console.log(d_card1);
+                console.log(d_card2);
+                console.log(mySum);
+                turns.push('dealer');
 
                 if( mySum == 21 ){ // if dealer wins
                     winner = 'dealer';
                 }
                 else if( mySum > 21 ){ // if dealer busts
-                    loser.push('dealer');
+                    losers.push('dealer');
                 }
 
+                console.log(turns[0]);
+                
                 for( let i = 0; i < clients.length; i++ ){
-                    io.sockets.connected[clients[i]].emit('cards', {dealer: myCards, clients: send, winner: winner, losers: losers });
+                    io.sockets.connected[clients[i]].emit('cards', {dealer: myCards, clients: send, winner: winner, losers: losers, turn: turns[0] });
                 }
-
             }
             else{
                 console.log('Waiting for other component...');
@@ -158,16 +166,15 @@ io.on('connection', function(socket) {
         if( b != -1 ){
             clients.splice(b, 1);
         }
-        mySum = 0;
-        cards2 = temp;
-        myCards = [];
+        if( clients.length == 0 ){
+            started = false;
+            started_users = 0;
+            mySum = 0;
+            cards2 = temp.slice(); // copy temp content into cards2
+            myCards = [];
+            turns = [];
+        }
     });
-
-    if( clients.length == 0 ){
-        started = false;
-        started_users = 0;
-    }
-
 });
 
 function shuffle(array) {

@@ -51,32 +51,38 @@ socket.on('cards', function(data) {
 
     if( winner.length > 0 ){ // if there's a winner
         if( winner == 'dealer' ){ // dealer wins
+            // alert("Game over. Dealer won!");
             $('#winner').text('Game over. Dealer won!');
         } else if( winner == id ){ // user wins
+            // alert("Game over. You won!");
             $('#winner').text('Game over. You won!');
         } else{ // partner wins
+            // alert("Game over. Your partner won!");
             $('#winner').text('Game over. Your partner won!');
         }
     }
-    else if( losers.length > 0 ){
-        if( losers.length == 1 && losers[0] == 'dealer' ){
-            // dealer loses
-        }
-        else{
-            for( var i = 0; i < losers.length; i++ ){
-                if( losers[i] != 'dealer' && losers[i] == id ){
-                    $('#loser').append('You busted!');
-                    i_lost = true;
-                }
-                else if( losers[i] != 'dealer' && losers[i] != id ){
-                    $('#loser').append('Your partner busted!');
-                }
+    else if( losers.length > 0 ){ // busting
+        for( var i = 0; i < losers.length; i++ ){
+            if( losers[i] == 'dealer'){
+                // alert("You busted");
+                $('#loser').append('Dealer busted!');
+                i_lost = true;
             }
+            else if( losers[i] == id ){
+                // alert("Your partner busted" );
+                $('#loser').append('You busted!');
+            }
+            else{
+                $('#loser').append('Your partner busted!');
+            }
+        
         }
     } else{
         // continue game
         // add hit and stand buttons
-        $('#buttons').css('visibility', 'visible');
+        if( data.turn == id ){
+            $('#buttons').css('visibility', 'visible');
+        }
     }
 
     /*
