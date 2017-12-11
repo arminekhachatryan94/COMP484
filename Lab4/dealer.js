@@ -74,10 +74,31 @@ io.on('connection', function(socket) {
                 shuffle(cards2); // randomize array
                 
                 send = []; // temp client cards to send
+                if( clients.length == 1 ){
+                    turns[0] = {
+                        id: '',
+                        sum: 0
+                    }
+                    turns[1] = {
+                        id: 'dealer',
+                        sum: 0
+                    }
+                }
+                else{
+                    turns[0] = {
+                        id: '',
+                        sum: 0
+                    }
 
-                clients_sums = [];
-                clients_sums[0] = 0;
-                clients_sums[1] = 0;
+                    turns[1] = {
+                        id: '',
+                        sum: 0
+                    }
+                    turns[2] = {
+                        id: 'dealer',
+                        sum: 0
+                    }
+                }
 
                 var winner = "";
                 var losers = [];
@@ -94,8 +115,9 @@ io.on('connection', function(socket) {
                     };
 
                     // add card values to sum
-                    clients_sums[i] += translateCard(c_card1.card[1], clients_sums[i]);
-                    clients_sums[i] += translateCard(c_card2.card[1], clients_sums[i]);
+                    turns[i].id = clients[i];
+                    turns[i].sum += translateCard(c_card1.card[1], turns[i].sum);
+                    turns[i].sum += translateCard(c_card2.card[1], turns[i].sum);
                     
                     send.push(c_card1);
                     send.push(c_card2);
@@ -105,12 +127,12 @@ io.on('connection', function(socket) {
                     console.log(c_card1);
                     console.log(c_card2);
                     console.log(clients[i]);
-                    console.log('Sum: ' + clients_sums[i]);
+                    console.log('Sum: ' + turns[i].sum);
 
-                    if( clients_sums[i] == 21 ){ // if client wins
+                    if( turns[i].sum == 21 ){ // if client wins
                         winner = clients[i];
                     }
-                    if( clients_sums[i] > 21 ){ // if client busts
+                    if( turns[i].sum > 21 ){ // if client busts
                         losers.push(clients[i]);
                         clients.splice(i, 1); // delete client from game
                     }
@@ -130,7 +152,8 @@ io.on('connection', function(socket) {
                 console.log(d_card1);
                 console.log(d_card2);
                 console.log(mySum);
-                turns.push('dealer');
+                turns[2].id = 'dealer';
+                turns[2].sum = mySum;
 
                 if( mySum == 21 ){ // if dealer wins
                     winner = 'dealer';

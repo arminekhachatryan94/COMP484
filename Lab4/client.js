@@ -80,7 +80,7 @@ socket.on('cards', function(data) {
     } else{
         // continue game
         // add hit and stand buttons
-        if( data.turn == id ){
+        if( data.turn.id == id ){
             $('#buttons').css('visibility', 'visible');
         }
     }
