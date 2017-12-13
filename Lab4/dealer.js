@@ -14,13 +14,13 @@ let cards = [ // S = Spades, H = Hearts, C = Clubs, D = Diamonds
 */
 
 let temp = [ // Sp = Spades, H = Hearts, C = Clubs, D = Diamonds
-    ['S', 'A'] , ['S', '2'] , ['S', '3'] , ['S', '4'] , ['S', '5'] , ['S', '6'] ,
+    /*['S', 'A'] , ['S', '2'] , ['S', '3'] , ['S', '4'] , ['S', '5'] , ['S', '6'] ,
     ['S', '7'] , ['S', '8'] , ['S', '9'] , ['S', '10'] , ['S', 'J'] , ['S', 'Q'] , ['S', 'K'] ,
     ['H', 'A'] , ['H', '2'] , ['H', '3'] , ['H', '4'] , ['H', '5'] , ['H', '6'] ,
     ['H', '7'] , ['H', '8'] , ['H', '9'] , ['H', '10'] , ['H', 'J'] , ['H', 'Q'] , ['H', 'K'] ,
     ['C', 'A'] , ['C', '2'] , ['C', '3'] , ['C', '4'] , ['C', '5'] , ['C', '6'] ,
     ['C', '7'] , ['C', '8'] , ['C', '9'] , ['C', '10'] , ['C', 'J'] , ['C', 'Q'] , ['C', 'K'] ,
-    ['D', 'A'] , ['D', '2'] , ['D', '3'] , ['D', '4'] , ['D', '5'] , ['D', '6'] ,
+    ['D', 'A'] , ['D', '2'] , ['D', '3'] , ['D', '4'] , ['D', '5'] , ['D', '6'] ,*/
     ['D', '7'] , ['D', '8'] , ['D', '9'] , ['D', '10'] , ['D', 'J'] , ['D', 'Q'] , ['D', 'K']
 ];
 
@@ -32,6 +32,7 @@ let started = false;
 let started_users = 0;
 
 let turns = [];
+let stand = [];
 
 console.log('Listening for connections on port 3000');
 
@@ -104,7 +105,8 @@ io.on('connection', function(socket) {
                 var losers = [];
 
                 // initialize clients cards
-                for( let i = 0; i < clients.length; i++ ){
+                let i = 0;
+                for( i = 0; i < clients.length; i++ ){
                     let c_card1 = { 
                         card: cards2[0],
                         id: clients[i]
@@ -126,7 +128,7 @@ io.on('connection', function(socket) {
                     
                     console.log(c_card1);
                     console.log(c_card2);
-                    console.log(clients[i]);
+                    console.log('client: ' + clients[i]);
                     console.log('Sum: ' + turns[i].sum);
 
                     if( turns[i].sum == 21 ){ // if client wins
@@ -137,7 +139,6 @@ io.on('connection', function(socket) {
                         clients.splice(i, 1); // delete client from game
                     }
 
-                    turns.push(clients[i]);
                 }
 
                 // initialize dealer cards
@@ -151,9 +152,10 @@ io.on('connection', function(socket) {
 
                 console.log(d_card1);
                 console.log(d_card2);
-                console.log(mySum);
-                turns[2].id = 'dealer';
-                turns[2].sum = mySum;
+                console.log('dealer sum: ' + mySum);
+                
+                turns[i].id = 'dealer';
+                turns[i].sum = mySum;
 
                 if( mySum == 21 ){ // if dealer wins
                     winner = 'dealer';
@@ -162,24 +164,72 @@ io.on('connection', function(socket) {
                     losers.push('dealer');
                 }
 
-                console.log(turns[0]);
+                console.log('next: ' + turns[0]);
                 
                 for( let i = 0; i < clients.length; i++ ){
                     io.sockets.connected[clients[i]].emit('cards', {dealer: myCards, clients: send, winner: winner, losers: losers, turn: turns[0] });
                 }
+                console.log(turns);
+                let n = {
+                   id: turns[0].id,
+                   sum: turns[0].sum
+                };
+
+                turns.splice(0, 1);
+                turns.push(n);
+                // console.log(turns);
             }
             else{
                 console.log('Waiting for other component...');
             }
+            console.log(turns);
         }
     });
 
     socket.on('hit', function(data){
-        console.log(data.id);
+        if( typeof data.id !== 'undefined' ){
+
+        console.log('hit: ' + data.id);
+        console.log('size of turns: ' + turns.length);
+        //console.log('size of stand: ' + stand.length);
+        let str = data.id;
+        let c_card = { 
+            card: cards2[0],
+            id: data.id
+        };
+        console.log('data.id: ' + c_card.id);
+
+        for( let i = 0; i < turns.length; i++ ){
+            console.log('i: ' + i + ', id: ' + turns[i].id);
+            if( turns[i].id != 'dealer' ){
+                io.sockets.connected[turns[i].id].emit('card', {id: c_card.id, card: c_card.card, turn: turns[0]});
+                // socket.emit('card', {card: c_card1, turn: turns[0]});
+            }
+        }
+        for( let i = 0; i < stand.length; i++ ){
+            if( stand[i].id != 'dealer' ){
+                console.log('id: ' + stand[i].id);
+                io.sockets.connected[stand[i].id].emit('card', {id: c_card.id, card: c_card, turn: turns[0]});
+                // socket.emit('card', {card: c_card1, turn: turns[0]});
+            }
+        }
+        
+        console.log(turns);
+        let n = {
+            id: turns[0].id,
+            sum: turns[0].sum
+        };
+        turns.splice(0, 1);
+        turns.push(n);
+        console.log(turns);
+        
+        cards2.splice(0, 1);
+        console.log('new card: ' + c_card);
+        }
     });
 
     socket.on('stand', function(data){
-        console.log(data.id);
+        console.log('new card: ' + data.id);
     });
 
     socket.on('disconnect', function(){
@@ -196,6 +246,7 @@ io.on('connection', function(socket) {
             cards2 = temp.slice(); // copy temp content into cards2
             myCards = [];
             turns = [];
+            stand = [];
         }
     });
 });

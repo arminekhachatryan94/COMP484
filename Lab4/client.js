@@ -62,7 +62,7 @@ socket.on('cards', function(data) {
         }
     }
     else if( losers.length > 0 ){ // busting
-        for( var i = 0; i < losers.length; i++ ){
+        for( let i = 0; i < losers.length; i++ ){
             if( losers[i] == 'dealer'){
                 // alert("You busted");
                 $('#loser').append('Dealer busted!');
@@ -75,27 +75,44 @@ socket.on('cards', function(data) {
             else{
                 $('#loser').append('Your partner busted!');
             }
-        
         }
     } else{
         // continue game
-        // add hit and stand buttons
+        // show hit and stand buttons
         if( data.turn.id == id ){
             $('#buttons').css('visibility', 'visible');
         }
     }
+});
 
-    /*
-    let card1 = data.card1;
-    let card2 = data.card2;
-    cards.push(card1);
-    cards.push(card2);
-    console.log(card1);
-    console.log(card2);
-    $('#my-cards').append('<img style="padding:2px;" src="images/' + card1[0] + card1[1] + '.png">');
-    $('#my-cards').append('<img style="padding:2px;"src="images/' + card2[0] + card2[1] + '.png">');    
-    console.log('executed');
-    */
+// click hit
+socket.on('card', function(data) {
+    if( typeof data.card !== 'undefined' && typeof data.turn !== 'undefined' ){
+        // let obj = data.card;
+        let card = data.card;
+        let turn = data.turn;
+        console.log('Type: ' + card[0] + ', Value: ' + card[1]);
+        console.log('card id: ' + data.id);
+        console.log('next id: ' + turn.id);
+
+        if( data.id == 'dealer' ){
+            $('#dealer-cards').append('<img style="padding:2px;" src="images/' + card[0] + card[1] + '.png">');
+        }
+        else if( data.id == id ){
+            $('#my-cards').append('<img style="padding:2px;" src="images/' + card[0] + card[1] + '.png">');
+            mySum += translateCard(card[1], mySum);
+            $('#myHand').text(mySum);
+        }
+        else{
+            $('#my-cards').append('<img style="padding:2px;" src="images/' + card[0] + card[1] + '.png">');
+            partnerSum += translateCard(card[1], partnerSum);
+            $('#partnerHand').text(partnerSum);
+        }
+
+        if( turn.id == id ){
+            $('#buttons').css('visibility', 'visible');
+        }
+    }
 });
 
 $(document).ready(function(){
@@ -107,21 +124,15 @@ $(document).ready(function(){
     });
 
     $('#hit').click( function(){
-        $(this).css('visibility', 'hidden');
+        $('#buttons').css('visibility', 'hidden');
         socket.emit('hit', {id: id});
     });
 
     $('#stand').click( function(){
-        $(this).css('visibility', 'hidden');        
-        socket.emit('hit', {id: id});
+        $('#buttons').css('visibility', 'hidden');        
+        socket.emit('stand', {id: id});
     });
 
-    /*
-    // click hit
-    socket.on('card', function(data) {
-        card = data.card;
-    });
-    */
 });
 
 function translateCard(num, mySum){
