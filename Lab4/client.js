@@ -88,12 +88,12 @@ socket.on('cards', function(data) {
 // click hit
 socket.on('card', function(data) {
     if( typeof data.card !== 'undefined' && typeof data.turn !== 'undefined' ){
-        // let obj = data.card;
         let card = data.card;
         let turn = data.turn;
         console.log('Type: ' + card[0] + ', Value: ' + card[1]);
         console.log('card id: ' + data.id);
         console.log('next id: ' + turn.id);
+        console.log('my id: ' + id);
 
         if( data.id == 'dealer' ){
             $('#dealer-cards').append('<img style="padding:2px;" src="images/' + card[0] + card[1] + '.png">');
@@ -104,7 +104,7 @@ socket.on('card', function(data) {
             $('#myHand').text(mySum);
         }
         else{
-            $('#my-cards').append('<img style="padding:2px;" src="images/' + card[0] + card[1] + '.png">');
+            $('#other-cards').append('<img style="padding:2px;" src="images/' + card[0] + card[1] + '.png">');
             partnerSum += translateCard(card[1], partnerSum);
             $('#partnerHand').text(partnerSum);
         }
