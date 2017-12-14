@@ -1,3 +1,4 @@
+
 // https://stackoverflow.com/questions/10058226/send-response-to-all-clients-except-sender/10099325#10099325
 
 let app = require('http').createServer(); // create HTTP server
@@ -126,10 +127,10 @@ io.on('connection', function(socket) {
                     
                     cards2.splice(0, 2);
                     
-                    console.log(c_card1);
-                    console.log(c_card2);
-                    console.log('client: ' + clients[i]);
-                    console.log('Sum: ' + turns[i].sum);
+                    //console.log(c_card1);
+                    //console.log(c_card2);
+                    //console.log('client: ' + clients[i]);
+                    //console.log('Sum: ' + turns[i].sum);
 
                     if( turns[i].sum == 21 ){ // if client wins
                         winner = clients[i];
@@ -150,9 +151,9 @@ io.on('connection', function(socket) {
                 mySum += translateCard(d_card1[1], mySum);
                 mySum += translateCard(d_card2[1], mySum);
 
-                console.log(d_card1);
-                console.log(d_card2);
-                console.log('dealer sum: ' + mySum);
+                //console.log(d_card1);
+                //console.log(d_card2);
+                //console.log('dealer sum: ' + mySum);
                 
                 turns[i].id = 'dealer';
                 turns[i].sum = mySum;
@@ -164,68 +165,88 @@ io.on('connection', function(socket) {
                     losers.push('dealer');
                 }
 
-                console.log('next: ' + turns[0]);
+                //console.log('next: ' + turns[0]);
                 
                 for( let i = 0; i < clients.length; i++ ){
                     io.sockets.connected[clients[i]].emit('cards', {dealer: myCards, clients: send, winner: winner, losers: losers, turn: turns[0] });
                 }
-                console.log(turns);
+                //console.log(turns);
                 let n = {
                    id: turns[0].id,
                    sum: turns[0].sum
                 };
 
-                turns.splice(0, 1);
-                turns.push(n);
+                //turns.splice(0, 1);
+                //turns.push(n);
                 // console.log(turns);
             }
             else{
                 console.log('Waiting for other component...');
             }
-            console.log(turns);
+            //console.log(turns);
         }
     });
 
 
     socket.on('hit', function(data){
-        if( typeof data.id !== 'undefined' ){
+        if( typeof data.id !== 'undefined' && data.id != 'dealer' ){
+            let c_card = { 
+                card: cards2[0],
+                id: data.id
+            };
+            let m = {
+                id: turns[0].id,
+                sum: turns[0].sum
+            };
 
-        console.log('hit: ' + data.id);
-        console.log('size of turns: ' + turns.length);
-        //console.log('size of stand: ' + stand.length);
-        let str = data.id;
-        let c_card = { 
-            card: cards2[0],
-            id: data.id
-        };
-        console.log('data.id: ' + c_card.id);
+            turns.splice(0, 1);
+            turns.push(m);
 
-        for( let i = 0; i < turns.length; i++ ){
-            console.log('i: ' + i + ', id: ' + turns[i].id);
-            if( turns[i].id != 'dealer' ){
-                io.sockets.connected[turns[i].id].emit('card', {id: c_card.id, card: c_card.card, turn: turns[0]});
-                // socket.emit('card', {card: c_card1, turn: turns[0]});
+            cards2.splice(0, 1);
+
+            if( turns[0].id == 'dealer' ){
+                console.log(turns);
+
+                // dealer gets card
+                let dealer_card = { 
+                    card: cards2[0],
+                    id: 'dealer'
+                };
+                
+                let n = {
+                    id: turns[0].id,
+                    sum: turns[0].sum
+                };
+                
+                cards2.splice(0, 1);
+                turns.splice(0, 1);
+                turns.push(n);
+                
+                for( let i = 0; i < turns.length; i++ ){
+                    if( turns[i].id != 'dealer' ){
+                        io.sockets.connected[turns[i].id].emit('card', {card: c_card, dealer: dealer_card, turn: turns[0]});
+                    }
+                }
+                for( let i = 0; i < stand.length; i++ ){
+                    if( stand[i].id != 'dealer' ){
+                        io.sockets.connected[stand[i].id].emit('card', {card: c_card, dealer: dealer_card, turn: turns[0]});
+                    }
+                }
             }
-        }
-        for( let i = 0; i < stand.length; i++ ){
-            if( stand[i].id != 'dealer' ){
-                // console.log('id: ' + stand[i].id);
-                io.sockets.connected[stand[i].id].emit('card', {id: c_card.id, card: c_card, turn: turns[0]});
-                // socket.emit('card', {card: c_card1, turn: turns[0]});
+            else{
+                for( let i = 0; i < turns.length; i++ ){
+                    if( turns[i].id != 'dealer' ){
+                        io.sockets.connected[turns[i].id].emit('card', { card: c_card, turn: turns[0]});
+                    }
+                }
+                for( let i = 0; i < stand.length; i++ ){
+                    if( stand[i].id != 'dealer' ){
+                        io.sockets.connected[stand[i].id].emit('card', { card: c_card, turn: turns[0]});
+                    }
+                }
             }
-        }
-        
-        console.log(turns);
-        let n = {
-            id: turns[0].id,
-            sum: turns[0].sum
-        };
-        turns.splice(0, 1);
-        turns.push(n);
-        console.log(turns);
-        
-        cards2.splice(0, 1);
-        console.log('new card: ' + c_card);
+            console.log(turns);
+            
         }
     });
 
@@ -276,4 +297,8 @@ function translateCard(num, mySum){
             return 1;
         }
     }
+}
+
+function dealerCards(){
+    ;
 }

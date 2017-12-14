@@ -95,18 +95,20 @@ socket.on('card', function(data) {
         console.log('next id: ' + turn.id);
         console.log('my id: ' + id);
 
-        if( data.id == 'dealer' ){
-            $('#dealer-cards').append('<img style="padding:2px;" src="images/' + card[0] + card[1] + '.png">');
-        }
-        else if( data.id == id ){
-            $('#my-cards').append('<img style="padding:2px;" src="images/' + card[0] + card[1] + '.png">');
+        if( data.card.id == id ){
+            $('#my-cards').append('<img style="padding:2px;" src="images/' + card.card[0] + card.card[1] + '.png">');
             mySum += translateCard(card[1], mySum);
             $('#myHand').text(mySum);
         }
         else{
-            $('#other-cards').append('<img style="padding:2px;" src="images/' + card[0] + card[1] + '.png">');
+            $('#other-cards').append('<img style="padding:2px;" src="images/' + card.card[0] + card.card[1] + '.png">');
             partnerSum += translateCard(card[1], partnerSum);
             $('#partnerHand').text(partnerSum);
+        }
+
+        if( typeof data.dealer !== 'undefined' ){
+            let d_card = data.dealer;
+            $('#dealer-cards').append('<img style="padding:2px;" src="images/' + d_card.card[0] + d_card.card[1] + '.png">');
         }
 
         if( turn.id == id ){
@@ -132,7 +134,6 @@ $(document).ready(function(){
         $('#buttons').css('visibility', 'hidden');        
         socket.emit('stand', {id: id});
     });
-
 });
 
 function translateCard(num, mySum){
