@@ -34,6 +34,8 @@ let started_users = 0;
 
 let turns = [];
 let stand = [];
+let bust = [];
+let blackjack = [];
 
 console.log('Listening for connections on port 3000');
 
@@ -102,9 +104,6 @@ io.on('connection', function(socket) {
                     }
                 }
 
-                var winner = "";
-                var losers = [];
-
                 // initialize clients cards
                 let i = 0;
                 for( i = 0; i < clients.length; i++ ){
@@ -133,11 +132,13 @@ io.on('connection', function(socket) {
                     //console.log('Sum: ' + turns[i].sum);
 
                     if( turns[i].sum == 21 ){ // if client wins
-                        winner = clients[i];
+                        let n = turns.splice(i, 1);
+                        blackjack.push(n);
                     }
                     if( turns[i].sum > 21 ){ // if client busts
-                        losers.push(clients[i]);
-                        clients.splice(i, 1); // delete client from game
+                        let n = turns.splice(i, 1);
+                        losers.push(n);
+                        bust.push(n);
                     }
 
                 }
@@ -159,94 +160,62 @@ io.on('connection', function(socket) {
                 turns[i].sum = mySum;
 
                 if( mySum == 21 ){ // if dealer wins
-                    winner = 'dealer';
+                    blackjack.push(turns[i]);
                 }
                 else if( mySum > 21 ){ // if dealer busts
-                    losers.push('dealer');
+                    bust.push(turns[i]);
                 }
 
                 //console.log('next: ' + turns[0]);
                 
                 for( let i = 0; i < clients.length; i++ ){
-                    io.sockets.connected[clients[i]].emit('cards', {dealer: myCards, clients: send, winner: winner, losers: losers, turn: turns[0] });
+                    io.sockets.connected[clients[i]].emit('cards', {dealer: myCards, clients: send, blackjack: blackjack, bust: bust, turn: turns[0]});
                 }
-                //console.log(turns);
-                let n = {
-                   id: turns[0].id,
-                   sum: turns[0].sum
-                };
-
-                //turns.splice(0, 1);
-                //turns.push(n);
-                // console.log(turns);
             }
             else{
                 console.log('Waiting for other component...');
             }
-            //console.log(turns);
         }
     });
 
 
     socket.on('hit', function(data){
         if( typeof data.id !== 'undefined' && data.id != 'dealer' ){
+
             let c_card = { 
                 card: cards2[0],
                 id: data.id
             };
+
+            turns[0].sum += translateCard(c_card.card[1], turns[0].sum);
+            console.log('sum of ' + turns[0].id + ':' + turns[0].sum);
+            console.log('hit: ' + data.id);
+            
             let m = {
                 id: turns[0].id,
                 sum: turns[0].sum
             };
 
-            turns.splice(0, 1);
-            turns.push(m);
-
             cards2.splice(0, 1);
 
-            if( turns[0].id == 'dealer' ){
-                console.log(turns);
-
-                // dealer gets card
-                let dealer_card = { 
-                    card: cards2[0],
-                    id: 'dealer'
-                };
-                
-                let n = {
-                    id: turns[0].id,
-                    sum: turns[0].sum
-                };
-                
-                cards2.splice(0, 1);
-                turns.splice(0, 1);
-                turns.push(n);
-                
-                for( let i = 0; i < turns.length; i++ ){
-                    if( turns[i].id != 'dealer' ){
-                        io.sockets.connected[turns[i].id].emit('card', {card: c_card, dealer: dealer_card, turn: turns[0]});
-                    }
+            if( turns[0].sum == 21 ){
+                for( let i = 0; i < clients.length; i++ ){
+                    io.sockets.connected[clients[i]].emit('card', {id: turns[0].id, card: c_card, blackjack: true, bust: false, turns: turns[1] });
                 }
-                for( let i = 0; i < stand.length; i++ ){
-                    if( stand[i].id != 'dealer' ){
-                        io.sockets.connected[stand[i].id].emit('card', {card: c_card, dealer: dealer_card, turn: turns[0]});
-                    }
+                let n = turns.splice(0, 1);
+                blackjack.push(n);
+            }
+            else if( turns[0].sum > 21 ){
+                for( let i = 0; i < clients.length; i++ ){
+                    io.sockets.connected[clients[i]].emit('card', {id: turns[0].id, card: c_card, blackjack: false, bust: true, turns: turns[1] });
+                }
+                let n = turns.splice(0, 1);
+                bust.push(n);
+            } else{
+                for( let i = 0; i < clients.length; i++ ){
+                    io.sockets.connected[clients[i]].emit('card', {id: turns[0].id, card: c_card, blackjack: false, bust: false });
                 }
             }
-            else{
-                for( let i = 0; i < turns.length; i++ ){
-                    if( turns[i].id != 'dealer' ){
-                        io.sockets.connected[turns[i].id].emit('card', { card: c_card, turn: turns[0]});
-                    }
-                }
-                for( let i = 0; i < stand.length; i++ ){
-                    if( stand[i].id != 'dealer' ){
-                        io.sockets.connected[stand[i].id].emit('card', { card: c_card, turn: turns[0]});
-                    }
-                }
-            }
-            console.log(turns);
-            
         }
     });
 
@@ -269,6 +238,8 @@ io.on('connection', function(socket) {
             myCards = [];
             turns = [];
             stand = [];
+            blackjack = [];
+            bust = [];
         }
     });
 });
@@ -299,6 +270,40 @@ function translateCard(num, mySum){
     }
 }
 
-function dealerCards(){
-    ;
+/*
+function checkWinnersLosers( winner, loser){
+    for( var i = 0; i < turns.length; i++ ){
+        if( turns[i].sum > 21 ){
+            let push = turns.splice(i, 1);
+            stand.push(push);
+            loser.push(push);
+            lost.push(push);
+        }
+        else if( turns[i] == 21 ){
+            let push = turns[i].splice(i, 1);
+            stand.push(push);
+            winner.push(push);
+        }
+    }
 }
+*/
+
+function drawDealer(){
+    while( mySum < 17 ){
+        c_card = {
+            card: cards2[0],
+            id: 'dealer'
+        }
+        for( let i = 0; i < turns.length; i++ ){
+            if( turns[i].id != 'dealer' ){
+                io.sockets.connected[turns[i].id].emit('dealer', { card: c_card });
+            }
+        }
+        for( let i = 0; i < stand.length; i++ ){
+            if( stand[i].id != 'dealer' ){
+                io.sockets.connected[stand[i].id].emit('dealer', { card: c_card });
+            }
+        }
+    }
+}
+
