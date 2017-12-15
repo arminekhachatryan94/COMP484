@@ -204,6 +204,10 @@ io.on('connection', function(socket) {
                 }
                 let n = turns.splice(0, 1);
                 blackjack.push(n);
+
+                if( turns[0].id == 'dealer' ){
+                    drawDealer();
+                }
             }
             else if( turns[0].sum > 21 ){
                 for( let i = 0; i < clients.length; i++ ){
@@ -211,6 +215,10 @@ io.on('connection', function(socket) {
                 }
                 let n = turns.splice(0, 1);
                 bust.push(n);
+
+                if( turns[0].id == 'dealer' ){
+                    drawDealer();
+                }
             } else{
                 for( let i = 0; i < clients.length; i++ ){
                     io.sockets.connected[clients[i]].emit('card', {id: turns[0].id, card: c_card, blackjack: false, bust: false });
@@ -220,7 +228,24 @@ io.on('connection', function(socket) {
     });
 
     socket.on('stand', function(data){
-        console.log('new card: ' + data.id);
+        let n = {
+            id: turns[0].id,
+            sum: turns[0].sum
+        };
+        
+        turns.splice(0, 1);
+        stand.push(n);
+        console.log('id: ' + data.id);
+        console.log('turns[0]: ' + turns[0]);
+        console.log('stand[0]: ' + stand[0]);
+
+        for( let i = 0; i < clients.length; i++ ){
+            io.sockets.connected[clients[i]].emit('stand', {id: data.id, next: turns[0] });
+        }
+
+        if( turns[0].id == 'dealer'){
+            drawDealer();
+        }
     });
 
     socket.on('disconnect', function(){
@@ -294,15 +319,45 @@ function drawDealer(){
             card: cards2[0],
             id: 'dealer'
         }
+        cards2.splice(0, 1);
+        myCards.push(c_card);
+        mySum += translateCard(c_card.card[1]);
         for( let i = 0; i < turns.length; i++ ){
             if( turns[i].id != 'dealer' ){
                 io.sockets.connected[turns[i].id].emit('dealer', { card: c_card });
             }
         }
         for( let i = 0; i < stand.length; i++ ){
-            if( stand[i].id != 'dealer' ){
-                io.sockets.connected[stand[i].id].emit('dealer', { card: c_card });
-            }
+            console.log('stand id: ' + stand[i].id);
+            io.sockets.connected[stand[i].id].emit('dealer', { card: c_card });
+        }
+    }
+
+    console.log('hello');
+
+    let _bust = false;
+    let _blackjack = false;
+
+    if( mySum > 21 ){
+        _bust = true;
+    }
+    else if( mySum == 21 ){
+        _blackjack = true;
+    }
+
+    // comparison
+    for( let i = 0; i < stand.length; i++ ){
+        if( stand[i].sum > mySum ){
+            // client wins
+            io.sockets.connected[stand[i].id].emit('compare', { id: stand[i].id, win: true, lose: false, push: false, bust: _bust, blackjack: _blackjack});
+        }
+        else if( stand[i].sum < mySum ){
+            // dealer wins
+            io.sockets.connected[stand[i].id].emit('compare', { id: stand[i].id, win: false, lose: true, push: false, bust: _bust, blackjack: _blackjack });
+        }
+        else if( stand[i].sum == mySum ){
+            // push "tie"
+            io.sockets.connected[stand[i].id].emit('compare', { id: stand[i].id, win: false, lose: false, push: true, bust: _bust, blackjack: _blackjack });
         }
     }
 }
