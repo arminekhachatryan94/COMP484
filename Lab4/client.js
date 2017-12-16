@@ -1,12 +1,9 @@
 var id = 'null';
-var busy;
 var socket = io('http://localhost:3000', {path: '/socket.io'}); // connect to server
 
 var cards = [];
 var mySum = 0;
 var partnerSum = 0;
-
-var i_lost = false;
 
 socket.on('id', function(data) { // listen for fromServer message
     id = data.id;
@@ -57,14 +54,16 @@ socket.on('cards', function(data) {
 
         for( let i = 0; i < blackjack.length; i++ ){
             if( blackjack[i].id == 'dealer' ){
-                $('#winner').append('<div>Dealer got blackjack! Game over</div>');
+                $('#winner').append('<div class="text-center">Dealer got blackjack! Game over</div>');
+                $('#new-game').css('visibility', 'visible');
                 dealer_wins = true;
                 break;
             }
         }
         for( let i = 0; i < bust.length; i++ ){
             if( bust[i].id == 'dealer' ){
-                $('#loser').append('<div>Dealer busted!</div>');
+                $('#loser').append('<div class="text-center">Dealer busted!</div>');
+                $('#new-game').css('visibility', 'visible');
                 dealer_lost = true;
                 break;
             }
@@ -72,23 +71,25 @@ socket.on('cards', function(data) {
         if( !dealer_wins ){
             for( var i = 0; i < blackjack.length; i++ ){
                 if( blackjack[i].id == id ){
-                    $('#winner').append('<div>You got blackjack!</div>');
+                    $('#winner').append('<div class="text-center">You got blackjack!</div>');
+                    $('#new-game').css('visibility', 'visible');
                     my_id_found = true;
                 }
-                else{
+                /*else{
                     $('#winner').append('<div>Your partner got blackjack!</div>');
-                }
+                }*/
             }
         }
         if( !dealer_lost ){
             for( var i = 0; i < bust.length; i++ ){
                 if( bust[i].id == id ){
-                    $('#loser').append('<div>You busted</div>');
+                    $('#loser').append('<div class="text-center">You busted</div>');
+                    $('#new-game').css('visibility', 'visible');
                     my_id_found = true;
                 }
-                else{
+                /*else{
                     $('#loser').append('<div>Your partner busted</div>');
-                }
+                }*/
             }
         }
     }
@@ -136,30 +137,34 @@ socket.on('card', function(data) {
         if( bust ){
             if( data.id == id ){
                 $('#buttons').css('visibility', 'hidden');
-                $('#loser').append('<div>You busted</div>');
+                $('#loser').append('<div class="text-center">You busted</div>');
+                $('#new-game').css('visibility', 'visible');
             }
             else if( data.id == 'dealer' ){ // game over
                 $('#buttons').css('visibility', 'hidden');
-                $('#loser').append('<div>Dealer busted</div>');
+                $('#loser').append('<div class="text-center">Dealer busted</div>');
+                $('#new-game').css('visibility', 'visible');
             }
-            else if( typeof data.turns.id !== 'undefined' ){
+            /*else if( typeof data.turns.id !== 'undefined' ){
                 // $('#buttons').css('visibility', 'visible');
                 $('#loser').append('<div>Your partner busted</div>');
-            }
+            }*/
         }
         else if( blackjack ){
             if( data.id == id ){
                 $('#buttons').css('visibility', 'hidden');
-                $('#winner').append('<div>You got blackjack</div>');
+                $('#winner').append('<div class="text-center">You got blackjack</div>');
+                $('#new-game').css('visibility', 'visible');
             }
             else if( data.id == 'dealer' ){ // game over
                 $('#buttons').css('visibility', 'hidden');
-                $('#winner').append('<div>Dealer got blackjack</div>');
+                $('#winner').append('<div class="text-center">Dealer got blackjack</div>');
+                $('#new-game').css('visibility', 'visible');
             }
-            else if( typeof data.turns.id !== 'undefined' ){
+            /*else if( typeof data.turns.id !== 'undefined' ){
                 // $('#buttons').css('visibility', 'visible');
                 $('#winner').append('<div>Your partner got blackjack</div>');
-            }
+            }*/
         }
         if( typeof data.turns.id !== 'undefined' ){
             if( data.turns.id == id ){
@@ -201,19 +206,22 @@ socket.on('compare', function(data) {
         let blackjack = data.blackjack;
 
         if( bust ){
-            $('#loser').append('<div>Dealer busted. You won!</div>');
+            $('#loser').append('<div class="text-center">Dealer busted. You won!</div>');
+            $('#new-game').css('visibility', 'visible');
         }
         else if( blackjack ){
-            $('#winner').append('<div>Dealer got blackjack</div>');
+            $('#winner').append('<div class="text-center">Dealer got blackjack</div>');
+            $('#new-game').css('visibility', 'visible');
         }
         else if( win == true && lose == false && push == false ){
-            $('#winner').append('<div>You won against the dealer</div>');
+            $('#winner').append('<div class="text-center">You won against the dealer</div>');
+            $('#new-game').css('visibility', 'visible');
         }
         else if( win == false && lose == true && push == false ){
-            $('#loser').append('<div>The dealer won</div>');
+            $('#loser').append('<div class="text-center">The dealer won</div>');
+            $('#new-game').css('visibility', 'visible');
         }
-        else if( win == false && lose == false && push == false ){
-
+        else if( win == false && lose == false && push == true ){
             $('#tie').css('visibility', 'visible');
             $('#push').css('visibility', 'visible');
         }
@@ -241,6 +249,12 @@ $(document).ready(function(){
 
     $('#push').click( function() {
         $(this).css('visibility', 'hidden');
+        $('#tie').css('visibility', 'hidden');
+        // reset html page
+        $('#new-game').css('visibility', 'visible');
+    });
+
+    $('#new-game').click( function() {
         location.reload();
     });
 });
@@ -263,5 +277,30 @@ function translateCard(num, mySum){
 }
 
 
+function resetHTML() {
+    $('#dealer-cards').html('<div class="' + 'text-white font-weight-bold">Dealer' + "'" + 's cards</div>');
+    $('#my-cards').html(
+        '<div class="font-weight-bold">My Cards</div>'
+        + '<div id="myHand"></div>'
+    );
+    // $('#myHand').html();
+    $('#other-cards').html(
+        '<div class="font-weight-bold">Other Player' + "'" + 's Cards</div>'
+        + '<div id="partnerHand"></div>'
+    );
+    // $('#partnerHand').html();
 
-// add a refresh button
+    $('#game-btn').css('visibility', 'visible');
+    $('#game').css('visibility', 'hidden');
+
+    $('#winner').html('');
+    $('#loser').html('');
+    $('#tie').html('');
+    $('#push').css('visibility', 'hidden');
+    $('#buttons').css('visibility', 'hidden');
+
+    cards = [];
+    mySum = 0;
+    partnerSum = 0;
+
+}

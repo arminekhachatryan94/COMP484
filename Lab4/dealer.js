@@ -360,5 +360,7 @@ function drawDealer(){
             io.sockets.connected[stand[i].id].emit('compare', { id: stand[i].id, win: false, lose: false, push: true, bust: _bust, blackjack: _blackjack });
         }
     }
-}
 
+    // reset game
+    
+}
