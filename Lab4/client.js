@@ -22,11 +22,13 @@ socket.on('cards', function(data) {
     dealer = data.dealer;
     players = data.clients;
 
-    for( let i = 0; i < dealer.length; i++ ){
-        console.log('dealer: ' + dealer[i][0]);
-        console.log('dealer: ' + dealer[i][1]);
-        $('#dealer-cards').append('<img style="padding:2px;" src="images/' + dealer[i][0] + dealer[i][1] + '.png">');        
-    }
+    //for( let i = 0; i < dealer.length; i++ ){
+        //console.log('dealer: ' + dealer[i][0]);
+        //console.log('dealer: ' + dealer[i][1]);
+        $('#dealer-cards').append('<img style="padding:2px;" src="images/' + dealer[0][0] + dealer[0][1] + '.png">');
+        $('#dealer-cards').append('<img class="real" style="padding:2px; display:none;" src="images/' + dealer[1][0] + dealer[1][1] + '.png">');
+        $('#dealer-cards').append('<img class="fake" style="padding:2px; display:inline;" src="images/unknown.png" height="96" width="71">');
+    //}
 
     for( let i = 0; i < players.length; i++ ){
         console.log(players[i]);
@@ -55,6 +57,8 @@ socket.on('cards', function(data) {
         for( let i = 0; i < blackjack.length; i++ ){
             if( blackjack[i].id == 'dealer' ){
                 $('#winner').append('<div class="text-center">Dealer got blackjack! Game over</div>');
+                $('.fake').css('display', 'none');
+                $('.real').css('display', 'inline');
                 $('#new-game').css('visibility', 'visible');
                 dealer_wins = true;
                 break;
@@ -63,6 +67,8 @@ socket.on('cards', function(data) {
         for( let i = 0; i < bust.length; i++ ){
             if( bust[i].id == 'dealer' ){
                 $('#loser').append('<div class="text-center">Dealer busted!</div>');
+                $('.fake').css('display', 'none');
+                $('.real').css('display', 'inline');
                 $('#new-game').css('visibility', 'visible');
                 dealer_lost = true;
                 break;
@@ -72,6 +78,8 @@ socket.on('cards', function(data) {
             for( var i = 0; i < blackjack.length; i++ ){
                 if( blackjack[i].id == id ){
                     $('#winner').append('<div class="text-center">You got blackjack!</div>');
+                    $('.fake').css('display', 'none');
+                    $('.real').css('display', 'inline');    
                     $('#new-game').css('visibility', 'visible');
                     my_id_found = true;
                 }
@@ -84,6 +92,8 @@ socket.on('cards', function(data) {
             for( var i = 0; i < bust.length; i++ ){
                 if( bust[i].id == id ){
                     $('#loser').append('<div class="text-center">You busted</div>');
+                    $('.fake').css('display', 'none');
+                    $('.real').css('display', 'inline');    
                     $('#new-game').css('visibility', 'visible');
                     my_id_found = true;
                 }
@@ -121,7 +131,8 @@ socket.on('card', function(data) {
         let bust = data.bust;
 
         if( data.id == 'dealer' ){
-            $('#dealer-cards').append('<img style="padding:2px;" src="images/' + card.card[0] + card.card[1] + '.png">');
+            $('#dealer-cards').append('<img class="real" style="padding:2px; display:none;" src="images/' + card.card[0] + cards.card[1] + '.png">');
+            $('#dealer-cards').append('<img class="fake" style="padding:2px; display:inline;" src="images/unknown.png" height="96" width="71">');    
         }
         else if( data.id == id ){
             $('#my-cards').append('<img style="padding:2px;" src="images/' + card.card[0] + card.card[1] + '.png">');
@@ -138,11 +149,15 @@ socket.on('card', function(data) {
             if( data.id == id ){
                 $('#buttons').css('visibility', 'hidden');
                 $('#loser').append('<div class="text-center">You busted</div>');
+                $('.fake').css('display', 'none');
+                $('.real').css('display', 'inline');
                 $('#new-game').css('visibility', 'visible');
             }
             else if( data.id == 'dealer' ){ // game over
                 $('#buttons').css('visibility', 'hidden');
                 $('#loser').append('<div class="text-center">Dealer busted</div>');
+                $('.fake').css('display', 'none');
+                $('.real').css('display', 'inline');
                 $('#new-game').css('visibility', 'visible');
             }
             /*else if( typeof data.turns.id !== 'undefined' ){
@@ -154,11 +169,15 @@ socket.on('card', function(data) {
             if( data.id == id ){
                 $('#buttons').css('visibility', 'hidden');
                 $('#winner').append('<div class="text-center">You got blackjack</div>');
+                $('.fake').css('display', 'none');
+                $('.real').css('display', 'inline');
                 $('#new-game').css('visibility', 'visible');
             }
             else if( data.id == 'dealer' ){ // game over
                 $('#buttons').css('visibility', 'hidden');
                 $('#winner').append('<div class="text-center">Dealer got blackjack</div>');
+                $('.fake').css('display', 'none');
+                $('.real').css('display', 'inline');
                 $('#new-game').css('visibility', 'visible');
             }
             /*else if( typeof data.turns.id !== 'undefined' ){
@@ -188,7 +207,8 @@ socket.on('stand', function(data) {
 socket.on('dealer', function(data) {
     if( typeof data.card !== 'undefined' ){
         console.log(data.card.card[0] + data.card.card[1]);
-        $('#dealer-cards').append('<img style="padding:2px;" src="images/' + data.card.card[0] + data.card.card[1] + '.png">');
+        $('#dealer-cards').append('<img class="real" style="padding:2px; display:none;" src="images/' + data.card.card[0] + data.card.card[1] + '.png">');
+        $('#dealer-cards').append('<img class="fake" style="padding:2px; display:inline;" src="images/unknown.png" height="96" width="71">');
     }
 });
 
@@ -207,21 +227,31 @@ socket.on('compare', function(data) {
 
         if( bust ){
             $('#loser').append('<div class="text-center">Dealer busted. You won!</div>');
+            $('.fake').css('display', 'none');
+            $('.real').css('display', 'inline');
             $('#new-game').css('visibility', 'visible');
         }
         else if( blackjack ){
             $('#winner').append('<div class="text-center">Dealer got blackjack</div>');
+            $('.fake').css('display', 'none');
+            $('.real').css('display', 'inline');
             $('#new-game').css('visibility', 'visible');
         }
         else if( win == true && lose == false && push == false ){
             $('#winner').append('<div class="text-center">You won against the dealer</div>');
+            $('.fake').css('display', 'none');
+            $('.real').css('display', 'inline');
             $('#new-game').css('visibility', 'visible');
         }
         else if( win == false && lose == true && push == false ){
             $('#loser').append('<div class="text-center">The dealer won</div>');
+            $('.fake').css('display', 'none');
+            $('.real').css('display', 'inline');
             $('#new-game').css('visibility', 'visible');
         }
         else if( win == false && lose == false && push == true ){
+            $('.fake').css('display', 'none');
+            $('.real').css('display', 'inline');
             $('#tie').css('visibility', 'visible');
             $('#push').css('visibility', 'visible');
         }
@@ -276,7 +306,7 @@ function translateCard(num, mySum){
     }
 }
 
-
+/*
 function resetHTML() {
     $('#dealer-cards').html('<div class="' + 'text-white font-weight-bold">Dealer' + "'" + 's cards</div>');
     $('#my-cards').html(
@@ -304,3 +334,4 @@ function resetHTML() {
     partnerSum = 0;
 
 }
+*/
