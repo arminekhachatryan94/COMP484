@@ -224,7 +224,7 @@
     display: inline-block;
 }
 
-.x-flex {
+.flex {
     display: flex;
 }
 
@@ -234,4 +234,12 @@
 
 .position-relative {
     position: relative;
+}
+
+.margin-right {
+    margin-right: 50px;
+}
+
+.margin-left {
+    margin-left: 50px;
 }
