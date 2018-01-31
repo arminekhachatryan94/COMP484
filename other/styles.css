@@ -11,7 +11,6 @@
     height: 200px;
     width: 400px;
     background: rgb(88,144,222);
-    display: inline-block;
 }
 
 /* YELLOW */
@@ -78,7 +77,7 @@
     height: 50px;
     width: 50px;
     background: rgb(74,74,74);
-    display: block;
+    display: inline-block;
 }
 
 #md-dark-grey-square {
@@ -99,7 +98,7 @@
     height: 50px;
     width: 100px;
     background: rgb(74,74,74);
-    display: block;
+    display: inline-block;
 }
 
 /* RED */
@@ -114,7 +113,6 @@
     height: 400px;
     width: 300px;
     background: rgb(206,0,43);
-    display: inline-block;
 }
 
 .red-square {
@@ -217,19 +215,23 @@
     right: 0;
 }
 
-.center1 {
-    position: absolute;
-    top: 150px; /* 400/2 - height of nested box/2 */
-    left: 100px; /* 300/2 - width of nested box/2 */
-}
-
-.center2 {
-    position: absolute;
-    top: 75px; /* 200/2 - height of nested box/2 (50) */
-    left: 55px; /* 400/2 - width of nested box/2 (300)*/
-}
-
 .center-center {
     margin: auto;
     vertical-align: middle;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.x-flex {
+    display: flex;
+}
+
+.inline-flex {
+    display: inline-flex;
+}
+
+.position-relative {
+    position: relative;
 }
