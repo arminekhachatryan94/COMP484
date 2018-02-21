@@ -1,0 +1,32 @@
+<!-- client side -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Socket.io</title>
+    
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js'></script>
+    
+    <script type='text/javascript'>
+
+        var socket = io('http://localhost:3000', {path: '/socket.io'});
+        
+        // receive 'Hello.' message from server
+        socket.on('fromServer', function(data) {
+            console.log( data.greeting );
+            socket.emit('fromClient', {greeting: 'Hi there.'}); // send 'Hi there.' message to server
+        });
+
+        // receive 'How are you?' message from server
+        socket.on('messageFromServer', function(data) {
+            console.log( data.message );
+            socket.emit('messageFromClient', {message: 'Great!' }); // send 'Great!' message to server
+        });
+
+     </script>     
+</head>
+<body>
+    
+</body>
+</html>
