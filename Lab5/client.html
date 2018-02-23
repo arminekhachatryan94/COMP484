@@ -13,18 +13,30 @@
         var socket = io('http://localhost:3000', {path: '/socket.io'});
         
         // receive 'Hello.' message from server
-        socket.on('fromServer', function(data) {
+        socket.on('message1FromServer', function(data) {
             console.log( data.greeting );
-            socket.emit('fromClient', {greeting: 'Hi there.'}); // send 'Hi there.' message to server
+            socket.emit('message1FromClient', {greeting: 'Hi there.'}); // send 'Hi there.' message to server
         });
 
         // receive 'How are you?' message from server
-        socket.on('messageFromServer', function(data) {
+        socket.on('message2FromServer', function(data) {
             console.log( data.message );
-            socket.emit('messageFromClient', {message: 'Great!' }); // send 'Great!' message to server
+            socket.emit('message2FromClient', {message: 'Great! How are you?' }); // send 'Great! How are you?' message to server
         });
 
-     </script>     
+        // receive 'Im good' message from server
+        socket.on('message3FromServer', function(data) {
+            console.log( data.message );
+            socket.emit('message3FromClient', {message:'Thats awesome!' }); // send 'Thats awesome' message to server
+        });
+
+        // receive 'See you later!' message from server
+        socket.on('message4FromServer', function(data) {
+            console.log( data.message );
+            socket.emit('message4FromClient', {message:'Goodbye!' }); // send 'Goodbye!' message to server
+        });
+
+     </script>
 </head>
 <body>
     
