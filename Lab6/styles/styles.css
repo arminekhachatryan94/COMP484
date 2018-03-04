@@ -1,0 +1,135 @@
+
+body {
+    background-color: rgb(248, 210, 194);
+}
+hr {
+    border: 0;
+    height: 2px;
+    background: #333;
+    background-image: linear-gradient(to right, #ffd7c7, #ff966c, #ffd7c7);
+}
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #ff966c;
+    color: white;
+    text-align: center;
+}
+main {
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+.salmon-text {
+    color: #ff966c;
+}
+.text-white {
+    color: white;
+}
+.hidden-source {
+    display: none;
+}
+.title {
+    font-size: 60px;
+}
+.flavor {
+    padding-top: 20px;
+}
+.text-box {
+    display: inline-block;
+    width: 500;
+    padding-bottom: 20px;
+}
+.error {
+    padding-top: 20px;
+    height: 350;
+}
+
+/* images */
+.strawberry {
+    height: 250;
+}
+.peach {
+    height: 400;
+}
+.berry {
+    height: 300;
+}
+.watermelon {
+    height: 400;
+}
+.taro {
+    height: 250;
+}
+.chocolate {
+    height: 400;
+}
+.coffee {
+    height: 400;
+}
+.coconut_flakes {
+    height: 300;
+}
+.strawberries {
+    height: 300;
+}
+.blueberries {
+    height: 400;
+}
+.kiwi {
+    height: 300;
+}
+.coconut_flakes {
+    height: 300;
+}
+.cookie-dough {
+    height: 600;
+}
+.sour-gummies {
+    height: 350;
+}
+.chocolate-crunch {
+    height: 400;
+}
+.mango-poppers {
+    height: 250;
+}
+.strawberry-poppers {
+    height: 250;
+}
+.mulberry {
+    height: 500;
+}
+.froyo {
+    height: 300;
+}
+
+/* navbar */
+nav {
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    width: 100%;}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #ff966c;
+}
+li {
+    float: left;
+}
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+li a:hover {
+    background-color: #fcbfa7;
+    color: white;
+}
