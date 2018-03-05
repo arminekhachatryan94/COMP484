@@ -26,13 +26,19 @@
     <main class="text-center">
         <h1 class="salmon-text text-center title">Yogurt World</h1>
         <hr>
-        <div class="flavor">
-            <h1>Mulberry flavored froyo!!!</h1>
-            <a href="/mulberry.jpg">
-                <img class="mulberry" src="/mulberry.jpg">
-                <div class="hidden-source">http://blog.kitchenaidindia.com/mulberry-frozen-yogurt-2/</div>
-            </a>
-            <h2>Coming soon</h2>
+        <div class="flavor special">
+            <% if(flavor && topping) { %>
+                <h1><%= flavor %> Froyo with</h1>
+                <h2><%= topping %></h2>
+                <a href="/sour-cherry.jpg">
+                    <img class="sour-cherry" src="/sour-cherry.jpg">
+                    <div class="hidden-source">https://www.simplyrecipes.com/recipes/cherry_frozen_yogurt/</div>
+                </a>
+                <h2>Only Today!!!</h2>
+            <% } else { %>
+                <h1>No specials today.</h1>
+                <h2>Please check back tomorrow.</h2>
+            <% } %>
         </div>
     </main>
     <footer class="text-center">
