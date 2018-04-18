@@ -3,14 +3,19 @@
     <div id="home">
         <div><b>iNotes</b></div>
     </div>
-
-    <note v-for="note in notes" v-text="note" :key="note.id"></note>
-    
+    <br>
+    <note class="note" v-for="note in notes" v-text="note" :key="note.id"></note>
+    <br>
     <div>
-        <div>Create a New Note</div>
+        <div id="new"><b>Create a New Note</b></div>
         <div>
-            <input type="text" v-model="note">
-            <button type="button" v-on:click="addNote()">Post Note</button>
+            <input id="input-box" type="text" @keydown="deleteError()" v-model="note">
+            <div v-if="error" id="error">
+                {{ error }}
+            </div>
+        </div>
+        <div>
+            <button id="btn" type="button" v-on:click="addNote()"><b>Post Note</b></button>
         </div>
     </div>
 </div>
@@ -27,8 +32,9 @@ export default {
   
     data () {
         return {
-            notes: ['Hello', 'How are you?'],
-            note: ''
+            notes: ['Comp 584 Notes', 'Vue.js components'],
+            note: '',
+            error: ''
         }
     },
     
@@ -37,7 +43,15 @@ export default {
             if( this.note != '' ){
                 this.notes.push(this.note);
                 this.note = '';
+                if( this.error != '' ){
+                    this.error = '';
+                }
+            } else {
+                this.error = "Cannot post an empty note";
             }
+        },
+        deleteError: function() {
+            this.error = '';
         }
     }
 }
@@ -53,4 +67,36 @@ export default {
     font-size: 30px;
     color: white;
 }
+
+#new {
+    color: pink;
+}
+
+#input-box {
+    width: 200px;
+    height: 100px;
+}
+
+#btn {
+    background-color: pink;
+    color: white;
+    font-size: 15px;
+    height: 40px;
+    width: 100px;
+    margin-top: 10px;
+}
+
+.note {
+    border: 1px solid pink;
+    margin: 10px;
+    margin-right: 200px;
+    margin-left: 200px;
+    padding: 10px;
+}
+
+#error {
+    color: magenta;
+    margin-bottom: 5px;
+}
+
 </style>

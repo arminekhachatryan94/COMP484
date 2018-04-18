@@ -16,7 +16,4 @@ export default {
 </script>
 
 <style scoped>
-.note-style {
-  padding-top: 50px;
-}
 </style>
